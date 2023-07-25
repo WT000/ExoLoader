@@ -56,8 +56,12 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CharaData.cs" />
+    <Compile Include="CustomChara.cs" />
+    <Compile Include="CustomMapManager.cs" />
     <Compile Include="FileManager.cs" />
     <Compile Include="Injector.cs" />
+    <Compile Include="ModInstance.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

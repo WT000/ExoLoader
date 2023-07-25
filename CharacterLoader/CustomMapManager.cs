@@ -6,8 +6,8 @@ using System.Threading.Tasks;
 
 namespace CharacterLoader
 {
-    public class FileManager
+    internal class CustomMapManager
     {
-        //collects methods that get and parse files provided by modders and stores images to prevent memory leaks (hopefully)
+        //handles the new map spots added for the custom characters using hooks from CustomMapPatches
     }
 }

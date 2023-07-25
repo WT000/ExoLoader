@@ -6,8 +6,8 @@ using System.Threading.Tasks;
 
 namespace CharacterLoader
 {
-    public class FileManager
+    internal static class ModInstance
     {
-        //collects methods that get and parse files provided by modders and stores images to prevent memory leaks (hopefully)
+        public static Injector instance;
     }
 }
