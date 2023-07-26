@@ -32,6 +32,13 @@ namespace CharacterLoader
         public string slider3right;
         public int[] slider3values;
         public bool charaGotMade;
+        public bool helioOnly;
+        public string[] likes;
+        public string[] dislikes;
+        public string skeleton;
+        public float[] stratoMapSpot;
+        public float[] helioMapSpot;
+        public float[] destroyedMapSpot;
 
         public CustomChara MakeChara()
         {
