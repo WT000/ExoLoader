@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace CharacterLoader
 {
-    internal class CharaData
+    public class CharaData
     {
         public string id;
         public string name;
@@ -63,7 +63,7 @@ namespace CharacterLoader
 
             CharaFillbarData[] charaFillbarDatas = {fillbar1, fillbar2, fillbar3};
 
-            return new CustomChara(id, nickname, gender, canLove, ageOffset, birthMonth, dialogueColor, defaultBg, charaFillbarDatas, name, basicInfo, moreInfo, augment);
+            return new CustomChara(id, nickname, gender, canLove, ageOffset, birthMonth, dialogueColor, defaultBg, charaFillbarDatas, name, basicInfo, moreInfo, augment, this);
         }
     }
 }
