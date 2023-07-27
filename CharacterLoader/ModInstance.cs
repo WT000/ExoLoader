@@ -9,5 +9,10 @@ namespace CharacterLoader
     internal static class ModInstance
     {
         public static Injector instance;
+
+        public static void log(string message)
+        {
+            instance.Log(message);
+        }
     }
 }

@@ -14,6 +14,7 @@ namespace CharacterLoader
             : base(idString, nickname, genderID, canLove, ageOffset, birthMonthOfYear, dialogColor, defaultBackground, fillbarDatas, name, basics, more, enhancement)
         {
             this.data = data;
+            
         }
     }
 }

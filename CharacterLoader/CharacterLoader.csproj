@@ -59,6 +59,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CharaAddPatches.cs" />
     <Compile Include="CharaData.cs" />
     <Compile Include="CustomChara.cs" />
     <Compile Include="CustomMapManager.cs" />
