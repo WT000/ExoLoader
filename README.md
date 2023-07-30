@@ -19,6 +19,8 @@ Just put the contents of the Exocolonist folder in the release zip into your Exo
 
 In the CustomCharacters located in the Exocolonist folder is a CharacterTemplate folder. Use it to figure out how you should structure your own character folder and how the images should be named. (Do ping me in the ecc discord if you have questions!! I'll just be happy you're using this)
 
+Make sure you're not saving data.json as a .txt file!
+
 For now the handling of the story sprite size is a bit rough. I recommend following the size and proportion of template2_angry.png but I didn't experiment too much, so tell me if you figure out what makes it work or not work.
 
 # Finding bugs?
