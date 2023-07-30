@@ -28,7 +28,7 @@ namespace CharacterLoader
                 ModInstance.log("Game is loading a custom chara sprite, getting image " + spriteName + "...");
                 try
                 {
-                    __result = FileManager.GetCustomImage(((CustomChara)ch).data.folderName, MakeRealSpriteName(spriteName));
+                    __result = FileManager.GetCustomImage(((CustomChara)ch).data.folderName, MakeRealSpriteName(spriteName, (CustomChara)ch));
                     return false;
                 } catch (Exception e)
                 {
@@ -39,7 +39,7 @@ namespace CharacterLoader
             }
         }
 
-        private static string MakeRealSpriteName(string input)
+        private static string MakeRealSpriteName(string input, CustomChara ch)
         {
             string[] split = input.Split('_');
             string first = split[0];
@@ -48,8 +48,7 @@ namespace CharacterLoader
             {
                 second = split[1];
             }
-
-            if (!first.EndsWith("1") && !first.EndsWith("2") && !first.EndsWith("3")) {
+            if ((!first.EndsWith("1") && !first.EndsWith("2") && !first.EndsWith("3")) || !ch.data.ages) {
                 first += Princess.artStage.ToString();
             }
             if (second == null)

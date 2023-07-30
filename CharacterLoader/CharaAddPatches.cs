@@ -86,37 +86,9 @@ namespace CharacterLoader
         [HarmonyPrefix]
         public static bool CheckIfCustomSprite(ref bool __result, string spriteName)
         {
-            ModInstance.log("SpriteExists call");
             __result = CustomChara.newCharaSprites.Contains(spriteName);
             return !__result;
         }
-
-        [HarmonyPatch(typeof(Chara), nameof(Chara.GetStorySpriteName))]
-        [HarmonyPostfix]
-        public static void LogCall1(string __result, string expression, int overrideArtStage)
-        {
-            if (__result == null) {
-                __result = "null";
-            }
-            ModInstance.log("Called Chara.GetStorySpriteName("+expression+","+overrideArtStage.ToString() + ") , returning " + __result);
-        }
-
-        [HarmonyPatch(typeof(CharaImage), nameof(CharaImage.SetCharas))]
-        [HarmonyPrefix]
-        public static void LogCall2()
-        {
-            ModInstance.log("Calling CharaImage.SetCharas()");
-        }
-
-        [HarmonyPatch(typeof(Result), nameof(Result.SetCharaImage))]
-        [HarmonyPrefix]
-        public static void LogCall3(CharaImageLocation location, string spriteName)
-        {
-            ModInstance.log("Calling Result.SetCharaImage(" + spriteName +")");
-        }
-
-
-
 
     }
 }

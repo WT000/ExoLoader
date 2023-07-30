@@ -41,6 +41,7 @@ namespace CharacterLoader
         public float[] destroyedMapSpot;
 
         public string folderName;
+        public bool ages;
 
         public CustomChara MakeChara()
         {
