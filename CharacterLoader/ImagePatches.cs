@@ -59,7 +59,36 @@ namespace CharacterLoader
             return first + "_" + second;
         }
 
-        
+        [HarmonyPatch(typeof(AssetManager))]
+        [HarmonyPatch(nameof(AssetManager.LoadCharaPortrait))]
+        [HarmonyPrefix]
+        public static bool LoadCustomPortrait(ref Sprite __result, string spriteName)
+        {
+            ModInstance.log("Loading Portrait with name : " + spriteName);
+            Chara ch = Chara.FromCharaImageID(spriteName);
+            if (ch == null || !(ch is CustomChara))
+            {
+                return true;
+            } else
+            {
+                __result = FileManager.GetCustomPortrait(((CustomChara)ch).data.folderName, MakeActualPortraitName(spriteName, (CustomChara)ch));
+                return false;
+            }
+        }
+
+        private static string MakeActualPortraitName(string input, CustomChara ch)
+        {
+            if (!input.EndsWith("1") && !input.EndsWith("2") && !input.EndsWith("3") && ch.data.ages)
+            {
+                input += Princess.artStage.ToString();
+            } else if (!ch.data.ages && (input.EndsWith("1") || input.EndsWith("2") || !input.EndsWith("3")))
+            {
+                input = input.RemoveEnding(input[-1].ToString());
+            }
+            return input;
+        }
+
+
     }
 
    

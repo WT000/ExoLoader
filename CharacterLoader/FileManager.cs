@@ -260,5 +260,45 @@ namespace CharacterLoader
                 return image;
             }
         }
+
+        public static Sprite GetCustomPortrait(string folderName,string imageName)
+        {
+            ModInstance.log("Looking for portrait image " + imageName + " in folder " +  folderName);
+            string portraitName = "portrait_" + imageName;
+            if (customSprites.ContainsKey(portraitName))
+            {
+                ModInstance.log("Requested image is already loaded!");
+                return customSprites[portraitName];
+            }
+
+            string path = Path.Combine(folderName, "Sprites", portraitName + ".png");
+            if (!File.Exists(path))
+            {
+                ModInstance.log("Couldn't find image " + path);
+                return null;
+            }
+
+            Sprite image = null;
+            Texture2D texture = null;
+            Byte[] bytes = null;
+            try
+            {
+                texture = new Texture2D(2, 2);
+                bytes = File.ReadAllBytes(path);
+                ImageConversion.LoadImage(texture, bytes);
+                texture.Apply();
+                image = Sprite.Create(texture, new Rect(0, 0, texture.width, texture.height), new Vector2(0.5f, 0));
+            }
+            catch (Exception e)
+            {
+                ModInstance.log("Couldn't make sprite from file " + path);
+                ModInstance.log(texture == null ? "The texture is null" : texture.isReadable.ToString());
+                ModInstance.log(bytes.Length.ToString() + "bytes in the image");
+                ModInstance.log(e.ToString());
+            }
+            customSprites.Add(portraitName, image);
+            ModInstance.log("Sprite created, " + image.texture.height + " in height");
+            return image;
+        }
     }
 }
