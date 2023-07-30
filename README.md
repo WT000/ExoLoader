@@ -17,4 +17,4 @@ Just put the contents of the Exocolonist folder in the release zip into your Exo
 
 # Adding a character
 
-In the CustomCharacters into the Exocolonist folder is a CharacterTemplate folder. Use it to figure out how you should structure your own character folder and how the images should be named. (Do ping me in the discord if you have questions!! I'll just be happy you're using this)
+In the CustomCharacters into the Exocolonist folder is a CharacterTemplate folder. Use it to figure out how you should structure your own character folder and how the images should be named. (Do ping me (@pandemoniium) in the ecc discord if you have questions!! I'll just be happy you're using this)
