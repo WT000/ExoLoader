@@ -5,9 +5,11 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Drawing;
 using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
+using UnityEngine.Experimental.Rendering;
 
 namespace CharacterLoader
 {
@@ -197,13 +199,66 @@ namespace CharacterLoader
             data.skeleton = skeleton;
             ModInstance.log("Skeleton read");
 
+            if (parsedJson.TryGetValue("Ages", out object ages))
+            {
+                data.ages = (string)ages == "TRUE";
+            }
+            else
+            {
+                ModInstance.instance.Log("No Ages entry for " + folderName);
+                return null;
+            }
+            ModInstance.log("Ages read");
+
             ModInstance.instance.Log("Finished Parsing");
+            data.folderName = folderName;
             return data;
         }
 
         public static string[] GetAllCustomCharaFolders()
         {
             return Directory.GetDirectories(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "CustomCharacters"));
+        }
+
+
+        public static Dictionary<string,Sprite> customSprites = new Dictionary<string,Sprite>();
+
+        public static Sprite GetCustomImage(string folderName, string imageName)
+        {
+            ModInstance.log("Looking for image " + imageName + " in " + folderName);
+            if (customSprites.ContainsKey(imageName))
+            {
+                ModInstance.log("Requested image is already loaded!");
+                return customSprites[imageName];
+            } else
+            {
+                string imagePath = Path.Combine(folderName, "Sprites", imageName + ".png");
+                if (!File.Exists(imagePath))
+                {
+                    ModInstance.log("Couldn't find image " + imagePath);
+                    return null;
+                }
+                Sprite image = null;
+                Texture2D texture = null;
+                Byte[] bytes = null;
+                try
+                {
+                    texture = new Texture2D(2,2);
+                    bytes = File.ReadAllBytes(imagePath);
+                    ImageConversion.LoadImage(texture, bytes);
+                    texture.Apply();
+                    image = Sprite.Create(texture, new Rect(0, 0, texture.width, texture.height), new Vector2(0.5f, 0));
+                } catch (Exception e)
+                {
+                    ModInstance.log("Couldn't make sprite from file " + imagePath);
+                    ModInstance.log(texture == null ? "The texture is null" : texture.isReadable.ToString());
+                    ModInstance.log(bytes.Length.ToString() + "bytes in the image");
+                    ModInstance.log(e.ToString());
+                }
+                customSprites.Add(imageName, image);
+                ModInstance.log("Sprite created, " + image.texture.height + " in height");
+                return image;
+            }
         }
     }
 }

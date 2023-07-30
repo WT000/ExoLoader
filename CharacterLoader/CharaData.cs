@@ -40,6 +40,8 @@ namespace CharacterLoader
         public float[] helioMapSpot;
         public float[] destroyedMapSpot;
 
+        public string folderName;
+
         public CustomChara MakeChara()
         {
             if (charaGotMade)

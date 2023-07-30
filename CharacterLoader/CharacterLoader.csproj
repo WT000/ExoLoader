@@ -45,6 +45,7 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Drawing" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -57,6 +58,10 @@
     <Reference Include="UnityEngine.CoreModule">
       <HintPath>..\..\..\..\..\..\..\Program Files (x86)\Steam\steamapps\common\Exocolonist\Exocolonist_Data\Managed\UnityEngine.CoreModule.dll</HintPath>
     </Reference>
+    <Reference Include="UnityEngine.ImageConversionModule, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\..\..\..\Program Files (x86)\Steam\steamapps\common\Exocolonist\Exocolonist_Data\Managed\UnityEngine.ImageConversionModule.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CharaAddPatches.cs" />
@@ -64,6 +69,7 @@
     <Compile Include="CustomChara.cs" />
     <Compile Include="CustomMapManager.cs" />
     <Compile Include="FileManager.cs" />
+    <Compile Include="ImagePatches.cs" />
     <Compile Include="Injector.cs" />
     <Compile Include="ModInstance.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

@@ -18,7 +18,6 @@ namespace CharacterLoader
             var harmony = new Harmony("CharacterLoader");
             harmony.PatchAll();
             Logger.LogInfo("CharacterLoader patches done.");
-            Log(AppDomain.CurrentDomain.BaseDirectory);
             ModInstance.instance = this;
         }
 
