@@ -90,5 +90,19 @@ namespace CharacterLoader
             return !__result;
         }
 
+        [HarmonyPatch(typeof(Chara), nameof(Chara.onMap), MethodType.Getter)]
+        [HarmonyPrefix]
+        public static bool OnMapGetterPatch(Chara __instance, ref bool __result)
+        {
+            if (__instance is CustomChara)
+            {
+                __result = !((CustomChara)__instance).data.helioOnly || Princess.HasMemory("newship");
+                return false;
+            } else
+            {
+                return true;
+            }
+        }
+
     }
 }
