@@ -64,6 +64,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AddMapSpotPatches.cs" />
     <Compile Include="CharaAddPatches.cs" />
     <Compile Include="CharaData.cs" />
     <Compile Include="CustomChara.cs" />
@@ -71,8 +72,10 @@
     <Compile Include="FileManager.cs" />
     <Compile Include="ImagePatches.cs" />
     <Compile Include="Injector.cs" />
+    <Compile Include="CustomMapObjectMaker.cs" />
     <Compile Include="ModInstance.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="StoryLoadPatches.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

@@ -25,7 +25,7 @@ namespace CharacterLoader
 
             if (fullJson == null ||  fullJson.Length == 0)
             {
-                ModInstance.instance.Log("Couldn't read text for " + folderName);
+                ModInstance.instance.Log("Couldn't read text for " + TrimFolderName(folderName));
                 return null;
             }
 
@@ -33,7 +33,7 @@ namespace CharacterLoader
             ModInstance.log("Converted json");
             if (parsedJson == null || parsedJson.Count == 0)
             {
-                ModInstance.instance.Log("Couldn't parse json for " + folderName);
+                ModInstance.instance.Log("Couldn't parse json for " + TrimFolderName(folderName));
                 return null;
             }
             CharaData data = new CharaData();
@@ -124,7 +124,7 @@ namespace CharacterLoader
             }
             else
             {
-                ModInstance.instance.Log("Data entry not found for " + folderName);
+                ModInstance.instance.Log("Data entry not found for " + TrimFolderName(folderName));
                 return null;
             }
             
@@ -134,7 +134,7 @@ namespace CharacterLoader
                 data.helioOnly = (string)value == "TRUE";
             } else
             {
-                ModInstance.instance.Log("No helio only entry for " + folderName);
+                ModInstance.instance.Log("No helio only entry for " + TrimFolderName(folderName));
                 return null;
             }
             ModInstance.log("HelioOnly read");
@@ -144,7 +144,7 @@ namespace CharacterLoader
                 string[] stringMapSpot = ((JArray)(parsedJson.GetValueSafe("PreHelioMapSpot"))).ToObject<string[]>();
                 if (stringMapSpot == null ||  stringMapSpot.Length == 0)
                 {
-                    ModInstance.instance.Log("No PreHelioMapSpot entry for " + folderName);
+                    ModInstance.instance.Log("No PreHelioMapSpot entry for " + TrimFolderName(folderName));
                     return null;
                 }
                 float[] mapSpot = { float.Parse(stringMapSpot[0]), float.Parse(stringMapSpot[1]), float.Parse(stringMapSpot[2]) };
@@ -153,7 +153,7 @@ namespace CharacterLoader
                 string[] stringMapSpotD = ((JArray)(parsedJson.GetValueSafe("DestroyedMapSpot"))).ToObject<string[]>();
                 if (stringMapSpot == null || stringMapSpot.Length == 0)
                 {
-                    ModInstance.instance.Log("No DestroyedMapSpot entry for " + folderName);
+                    ModInstance.instance.Log("No DestroyedMapSpot entry for " + TrimFolderName(folderName));
                     return null;
                 }
                 float[] mapSpotD = { float.Parse(stringMapSpotD[0]), float.Parse(stringMapSpotD[1]), float.Parse(stringMapSpotD[2]) };
@@ -164,7 +164,7 @@ namespace CharacterLoader
             string[] stringMapSpotHelio = ((JArray)(parsedJson.GetValueSafe("PostHelioMapSpot"))).ToObject<string[]>();
             if (stringMapSpotHelio == null || stringMapSpotHelio.Length == 0)
             {
-                ModInstance.instance.Log("No PostHelioMapSpot entry for " + folderName);
+                ModInstance.instance.Log("No PostHelioMapSpot entry for " + TrimFolderName(folderName));
                 return null;
             }
             float[] mapSpotHelio = { float.Parse(stringMapSpotHelio[0]), float.Parse(stringMapSpotHelio[1]), float.Parse(stringMapSpotHelio[2]) };
@@ -175,7 +175,7 @@ namespace CharacterLoader
             string[] likes = ((JArray)(parsedJson.GetValueSafe("Likes"))).ToObject<string[]>();
             if (likes == null)
             {
-                ModInstance.instance.Log("No Likes entry for " + folderName);
+                ModInstance.instance.Log("No Likes entry for " + TrimFolderName(folderName));
                 return null;
             }
             data.likes = likes;
@@ -184,7 +184,7 @@ namespace CharacterLoader
             string[] dislikes = ((JArray)(parsedJson.GetValueSafe("Likes"))).ToObject<string[]>();
             if (dislikes == null)
             {
-                ModInstance.instance.Log("No Dislikes entry for " + folderName);
+                ModInstance.instance.Log("No Dislikes entry for " + TrimFolderName(folderName));
                 return null;
             }
             data.dislikes = dislikes;
@@ -193,7 +193,7 @@ namespace CharacterLoader
             string skeleton = (string)parsedJson.GetValueSafe("Skeleton");
             if (skeleton == null || skeleton.Length == 0)
             {
-                ModInstance.instance.Log("No Skeleton entry for " + folderName);
+                ModInstance.instance.Log("No Skeleton entry for " + TrimFolderName(folderName));
                 return null;
             }
             data.skeleton = skeleton;
@@ -205,7 +205,7 @@ namespace CharacterLoader
             }
             else
             {
-                ModInstance.instance.Log("No Ages entry for " + folderName);
+                ModInstance.instance.Log("No Ages entry for " + TrimFolderName(folderName));
                 return null;
             }
             ModInstance.log("Ages read");
@@ -225,7 +225,7 @@ namespace CharacterLoader
 
         public static Sprite GetCustomImage(string folderName, string imageName)
         {
-            ModInstance.log("Looking for image " + imageName + " in " + folderName);
+            ModInstance.log("Looking for image " + imageName + " in " + TrimFolderName(folderName));
             if (customSprites.ContainsKey(imageName))
             {
                 ModInstance.log("Requested image is already loaded!");
@@ -235,7 +235,7 @@ namespace CharacterLoader
                 string imagePath = Path.Combine(folderName, "Sprites", imageName + ".png");
                 if (!File.Exists(imagePath))
                 {
-                    ModInstance.log("Couldn't find image " + imagePath);
+                    ModInstance.log("Couldn't find image " + TrimFolderName(imagePath));
                     return null;
                 }
                 Sprite image = null;
@@ -250,7 +250,7 @@ namespace CharacterLoader
                     image = Sprite.Create(texture, new Rect(0, 0, texture.width, texture.height), new Vector2(0.5f, 0));
                 } catch (Exception e)
                 {
-                    ModInstance.log("Couldn't make sprite from file " + imagePath);
+                    ModInstance.log("Couldn't make sprite from file " + TrimFolderName(imagePath));
                     ModInstance.log(texture == null ? "The texture is null" : texture.isReadable.ToString());
                     ModInstance.log(bytes.Length.ToString() + "bytes in the image");
                     ModInstance.log(e.ToString());
@@ -263,7 +263,7 @@ namespace CharacterLoader
 
         public static Sprite GetCustomPortrait(string folderName,string imageName)
         {
-            ModInstance.log("Looking for portrait image " + imageName + " in folder " +  folderName);
+            ModInstance.log("Looking for portrait image " + imageName + " in folder " +  TrimFolderName(folderName));
             string portraitName = "portrait_" + imageName;
             if (customSprites.ContainsKey(portraitName))
             {
@@ -274,7 +274,7 @@ namespace CharacterLoader
             string path = Path.Combine(folderName, "Sprites", portraitName + ".png");
             if (!File.Exists(path))
             {
-                ModInstance.log("Couldn't find image " + path);
+                ModInstance.log("Couldn't find image " + TrimFolderName(path));
                 return null;
             }
 
@@ -291,7 +291,7 @@ namespace CharacterLoader
             }
             catch (Exception e)
             {
-                ModInstance.log("Couldn't make sprite from file " + path);
+                ModInstance.log("Couldn't make sprite from file " + TrimFolderName(path));
                 ModInstance.log(texture == null ? "The texture is null" : texture.isReadable.ToString());
                 ModInstance.log(bytes.Length.ToString() + "bytes in the image");
                 ModInstance.log(e.ToString());
@@ -299,6 +299,11 @@ namespace CharacterLoader
             customSprites.Add(portraitName, image);
             ModInstance.log("Sprite created, " + image.texture.height + " in height");
             return image;
+        }
+
+        public static string TrimFolderName(string folderName)
+        {
+            return folderName.RemoveStart(AppDomain.CurrentDomain.BaseDirectory);
         }
     }
 }

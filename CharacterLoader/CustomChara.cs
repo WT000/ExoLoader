@@ -8,7 +8,7 @@ namespace CharacterLoader
 {
     public class CustomChara : Chara
     {
-        public static List<CustomChara> customCharas;
+        public static Dictionary<string,CustomChara> customCharasById = new Dictionary<string, CustomChara>();
         public static List<string> newCharaSprites = new List<string>();
 
 

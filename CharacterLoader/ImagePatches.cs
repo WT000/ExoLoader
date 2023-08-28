@@ -48,7 +48,7 @@ namespace CharacterLoader
             {
                 second = split[1];
             }
-            if ((!first.EndsWith("1") && !first.EndsWith("2") && !first.EndsWith("3")) || !ch.data.ages) {
+            if ((!first.EndsWith("1") && !first.EndsWith("2") && !first.EndsWith("3")) && ch.data.ages) {
                 first += Princess.artStage.ToString();
             }
             if (second == null)

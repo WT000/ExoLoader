@@ -20,7 +20,6 @@ namespace CharacterLoader
                     ModInstance.instance.Log("Found no folder");
                     return;
                 }
-                ModInstance.instance.Log("Found " + charaFolders[0]);
                 foreach (string folder in  charaFolders)
                 {
                     ModInstance.instance.Log("Parsing folder " +  folder);
@@ -30,7 +29,7 @@ namespace CharacterLoader
                     if (data != null)
                     {
                         data.MakeChara();
-                        CustomChara.customCharas.AddSafe((CustomChara)Chara.FromID(data.id));
+                        CustomChara.customCharasById.Add(data.id, (CustomChara)Chara.FromID(data.id));
                     }
                     ModInstance.log(data.id + " added succesfully, adding images to the character sprite list");
                     string[] originalList = Northway.Utils.Singleton<AssetManager>.instance.charaSpriteNames;
@@ -58,6 +57,9 @@ namespace CharacterLoader
 
                     Northway.Utils.Singleton<AssetManager>.instance.charaSpriteNames = newlist.ToArray();
                     ModInstance.log("Added " +  counter + " image names to the list");
+
+                    ParserStory.LoadStoriesFile("chara_" + data.id + ".exo", Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "CustomCharacters", folder));
+                    ModInstance.log("Loaded story file with Parser");
                 }
             }
         }
@@ -66,7 +68,7 @@ namespace CharacterLoader
         [HarmonyPostfix]
         public static void AddLikesDislikes()
         {
-            foreach (CustomChara CChara in CustomChara.customCharas)
+            foreach (CustomChara CChara in CustomChara.customCharasById.Values)
             {
                 foreach (string like in CChara.data.likes)
                 {
@@ -96,7 +98,7 @@ namespace CharacterLoader
         {
             if (__instance is CustomChara)
             {
-                __result = !((CustomChara)__instance).data.helioOnly || Princess.HasMemory("newship");
+                __result = (!((CustomChara)__instance).data.helioOnly || Princess.HasMemory("newship"));
                 return false;
             } else
             {
