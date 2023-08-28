@@ -7,12 +7,10 @@ Current features:
 - Adding a character to the list without modifying the Chara.tsv file (easier + more compatible)
 - Loading new sprites into the game for the portrait and the character sprite during stories
 - Friendship points actually functional
-
-Which means your character will not appear on the map, but you'll be able to make them appear in existing stories by editing the .exo files and give the player friendship points for them. 
+- Add a map spot to the map for your character that triggers their stories
 
 Coming soon (tm) :
-- Adding a new map spot for your character
-- Use one of the game's skeleton animation with another texture to use for your map spot
+- Use one of the game's skeleton animation with another texture to use for your map spot OR use a static image instead
 
 # Installation
 
