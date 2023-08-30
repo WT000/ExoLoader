@@ -247,7 +247,10 @@ namespace CharacterLoader
                     bytes = File.ReadAllBytes(imagePath);
                     ImageConversion.LoadImage(texture, bytes);
                     texture.Apply();
-                    image = Sprite.Create(texture, new Rect(0, 0, texture.width, texture.height), new Vector2(0.5f, 0));
+                    int height = texture.height;
+                    int targetHeightInUnits = 16;
+                    float density = height / targetHeightInUnits;
+                    image = Sprite.Create(texture, new Rect(0, 0, texture.width, texture.height), new Vector2(0.5f, 0), density);
                 } catch (Exception e)
                 {
                     ModInstance.log("Couldn't make sprite from file " + TrimFolderName(imagePath));
