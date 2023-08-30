@@ -58,6 +58,10 @@ namespace CharacterLoader
         [HarmonyPrefix]
         public static void LoggingPatch(Story newStory, MapSpot __instance)
         {
+            if (!CustomChara.customCharasById.ContainsKey(__instance.charaID))
+            {
+                return;
+            }
             if (newStory == null)
             {
                 ModInstance.log("Called SetOrPickCharaStory on MapSpot with charaID " + __instance.charaID + " for Picking");
@@ -79,6 +83,20 @@ namespace CharacterLoader
             {
                 ModInstance.log("Triggered MapSpot with charaID " + __instance.charaID + " with story " + __instance.storyName.ToString());
             }
+        }
+
+        [HarmonyPatch(typeof(Result), nameof(Result.SetDefaultImages))]
+        [HarmonyPrefix]
+        public static void LogDefaultImages(Result __instance)
+        {
+            if (__instance.story.chara != null)
+            {
+                ModInstance.log("Setting default images for story " + __instance.story.storyID + " for chara " + __instance.story.chara.charaID);
+            } else
+            {
+                ModInstance.log("Setting default images for story " + __instance.story.storyID + " with null chara");
+            }
+            
         }
     }
 }

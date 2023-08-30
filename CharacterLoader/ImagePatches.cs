@@ -21,11 +21,11 @@ namespace CharacterLoader
             Chara ch = Chara.FromCharaImageID(spriteName);
             if (!(ch is CustomChara))
             {
-                ModInstance.log("Game is loading a vanilla character Sprite");
+                ModInstance.log("CharaImage is loading a vanilla character Sprite");
                 return true;
             } else
             {
-                ModInstance.log("Game is loading a custom chara sprite, getting image " + spriteName + "...");
+                ModInstance.log("CharaImage is loading a custom chara sprite, getting image " + spriteName + "...");
                 try
                 {
                     __result = FileManager.GetCustomImage(((CustomChara)ch).data.folderName, MakeRealSpriteName(spriteName, (CustomChara)ch));
@@ -38,6 +38,35 @@ namespace CharacterLoader
                 }
             }
         }
+
+        [HarmonyPatch(typeof(AssetManager))]
+        [HarmonyPatch(nameof(AssetManager.LoadCharaSprite))]
+        [HarmonyPrefix]
+        public static bool SecondGetCustomSprite(ref Sprite __result, string spriteName)
+        {
+            Chara ch = Chara.FromCharaImageID(spriteName);
+            if (!(ch is CustomChara))
+            {
+                ModInstance.log("AssetManager is loading a vanilla character Sprite");
+                return true;
+            }
+            else
+            {
+                ModInstance.log("AssetManager is loading a custom chara sprite, getting image " + spriteName + "...");
+                try
+                {
+                    __result = FileManager.GetCustomImage(((CustomChara)ch).data.folderName, MakeRealSpriteName(spriteName, (CustomChara)ch));
+                    return false;
+                }
+                catch (Exception e)
+                {
+                    ModInstance.log("Couldn't get image");
+                    ModInstance.log(e.ToString());
+                    return true;
+                }
+            }
+        }
+
 
         private static string MakeRealSpriteName(string input, CustomChara ch)
         {

@@ -87,8 +87,8 @@ namespace CharacterLoader
 
             try
             {
-                MethodInfo mInfo = typeof(MapSpot).GetMethod("EnableTrigger", BindingFlags.NonPublic | BindingFlags.Instance);
-                mInfo.Invoke(mapSpot, new object[] { true });
+                //MethodInfo mInfo = typeof(MapSpot).GetMethod("EnableTrigger", BindingFlags.NonPublic | BindingFlags.Instance);
+                //mInfo.Invoke(mapSpot, new object[] { true });
             } 
             catch (Exception e)
             {

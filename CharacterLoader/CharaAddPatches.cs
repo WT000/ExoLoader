@@ -58,8 +58,6 @@ namespace CharacterLoader
                     Northway.Utils.Singleton<AssetManager>.instance.charaSpriteNames = newlist.ToArray();
                     ModInstance.log("Added " +  counter + " image names to the list");
 
-                    ParserStory.LoadStoriesFile("chara_" + data.id + ".exo", Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "CustomCharacters", folder));
-                    ModInstance.log("Loaded story file with Parser");
                 }
             }
         }
@@ -81,6 +79,8 @@ namespace CharacterLoader
                     CardData cd = CardData.FromID(dislike);
                     CChara.likedCards.AddSafe(cd);
                 }
+                ParserStory.LoadStoriesFile("chara_" + CChara.data.id + ".exo", Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "CustomCharacters", CChara.data.folderName , "Stories"));
+                ModInstance.log("Loaded story file with Parser");
             }
         }
 
