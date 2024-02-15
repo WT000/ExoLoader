@@ -8,6 +8,8 @@ namespace CharacterLoader
     [HarmonyPatch]
     public class CharaAddPatches
     {
+        private static bool logStoryReq;
+
         [HarmonyPatch(typeof(ParserData),"LoadData")]
         [HarmonyPostfix]
         public static void AddCharaPatch(string filename)
@@ -67,7 +69,9 @@ namespace CharacterLoader
         public static void FinalizeLoading()
         {
             FinalizeCharacters();
+            logStoryReq = true;
             LoadCustomContent();
+            logStoryReq = false;
         }
 
         public static void FinalizeCharacters() //Loads likes, dislikes, and stories for custom characters
@@ -128,5 +132,14 @@ namespace CharacterLoader
             }
         }
 
+        [HarmonyPatch(typeof(Story), "FinishFindLocation")]
+        [HarmonyPrefix]
+        public static void DoLog(StoryReq req, bool ignoreDoubleLocationWarnings)
+        {
+            if (logStoryReq)
+            {
+                ModInstance.log("FinishFindLocation log, req = " + req.stringID);
+            }
+        }
     }
 }
