@@ -220,6 +220,11 @@ namespace CharacterLoader
             return Directory.GetDirectories(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "CustomCharacters"));
         }
 
+        public static string[] GetAllCustomContentFolders()
+        {
+            return Directory.GetDirectories(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "CustomContent"));
+        }
+
 
         public static Dictionary<string,Sprite> customSprites = new Dictionary<string,Sprite>();
 

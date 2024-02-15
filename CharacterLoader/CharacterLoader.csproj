@@ -68,6 +68,7 @@
     <Compile Include="CharaAddPatches.cs" />
     <Compile Include="CharaData.cs" />
     <Compile Include="CustomChara.cs" />
+    <Compile Include="CustomContentParser.cs" />
     <Compile Include="CustomMapManager.cs" />
     <Compile Include="FileManager.cs" />
     <Compile Include="ImagePatches.cs" />

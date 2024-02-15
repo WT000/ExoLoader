@@ -14,7 +14,7 @@ namespace CharacterLoader
         {
             if (filename == "Exocolonist - charas")
             {
-                ModInstance.instance.Log("Checking folders");
+                ModInstance.instance.Log("Checking CustomCharacter folders");
                 string[] charaFolders = FileManager.GetAllCustomCharaFolders();
                 if (charaFolders != null && charaFolders.Length == 0) {
                     ModInstance.instance.Log("Found no folder");
@@ -22,7 +22,7 @@ namespace CharacterLoader
                 }
                 foreach (string folder in  charaFolders)
                 {
-                    ModInstance.instance.Log("Parsing folder " +  folder);
+                    ModInstance.instance.Log("Parsing folder " +  FileManager.TrimFolderName(folder));
                     
                     CharaData data = FileManager.ParseCustomData(folder);
                     ModInstance.log("Adding character: " + data.id);
@@ -64,7 +64,13 @@ namespace CharacterLoader
 
         [HarmonyPatch(typeof(ParserData), nameof(ParserData.LoadAllData))]
         [HarmonyPostfix]
-        public static void AddLikesDislikes()
+        public static void FinalizeLoading()
+        {
+            FinalizeCharacters();
+            LoadCustomContent();
+        }
+
+        public static void FinalizeCharacters() //Loads likes, dislikes, and stories for custom characters
         {
             foreach (CustomChara CChara in CustomChara.customCharasById.Values)
             {
@@ -81,6 +87,22 @@ namespace CharacterLoader
                 }
                 ParserStory.LoadStoriesFile("chara_" + CChara.data.id + ".exo", Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "CustomCharacters", CChara.data.folderName , "Stories"));
                 ModInstance.log("Loaded story file with Parser");
+            }
+        }
+
+        public static void LoadCustomContent()
+        {
+            ModInstance.instance.Log("Checking CustomContent folders");
+            string[] contentFolders = FileManager.GetAllCustomContentFolders();
+            if (contentFolders != null && contentFolders.Length == 0)
+            {
+                ModInstance.instance.Log("Found no folder");
+                return;
+            }
+            foreach(string folder in contentFolders)
+            {
+                ModInstance.log("Parsing content folder: " + FileManager.TrimFolderName(folder));
+                CustomContentParser.ParseContentFolder(folder);
             }
         }
 
