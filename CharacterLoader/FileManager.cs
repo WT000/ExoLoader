@@ -127,50 +127,64 @@ namespace CharacterLoader
                 ModInstance.instance.Log("Data entry not found for " + TrimFolderName(folderName));
                 return null;
             }
-            
 
-            if (parsedJson.TryGetValue("HelioOnly", out object value))
+            if (parsedJson.TryGetValue("OnMap", out object onMap))
             {
-                data.helioOnly = (string)value == "TRUE";
-            } else
+                data.onMap = (string)onMap == "TRUE";
+            }
+            else
             {
-                ModInstance.instance.Log("No helio only entry for " + TrimFolderName(folderName));
+                ModInstance.instance.Log("OnMap entry for " + TrimFolderName(folderName));
                 return null;
             }
-            ModInstance.log("HelioOnly read");
+            ModInstance.log("OnMap read");
 
-            if (!data.helioOnly) 
+            if (data.onMap)
             {
-                string[] stringMapSpot = ((JArray)(parsedJson.GetValueSafe("PreHelioMapSpot"))).ToObject<string[]>();
-                if (stringMapSpot == null ||  stringMapSpot.Length == 0)
+                if (parsedJson.TryGetValue("HelioOnly", out object helioOnly))
                 {
-                    ModInstance.instance.Log("No PreHelioMapSpot entry for " + TrimFolderName(folderName));
+                    data.helioOnly = (string)helioOnly == "TRUE";
+                }
+                else
+                {
+                    ModInstance.instance.Log("No helio only entry for " + TrimFolderName(folderName));
                     return null;
                 }
-                float[] mapSpot = { float.Parse(stringMapSpot[0]), float.Parse(stringMapSpot[1]), float.Parse(stringMapSpot[2]) };
-                data.stratoMapSpot = mapSpot;
+                ModInstance.log("HelioOnly read");
 
-                string[] stringMapSpotD = ((JArray)(parsedJson.GetValueSafe("DestroyedMapSpot"))).ToObject<string[]>();
-                if (stringMapSpot == null || stringMapSpot.Length == 0)
+                if (!data.helioOnly)
                 {
-                    ModInstance.instance.Log("No DestroyedMapSpot entry for " + TrimFolderName(folderName));
+                    string[] stringMapSpot = ((JArray)(parsedJson.GetValueSafe("PreHelioMapSpot"))).ToObject<string[]>();
+                    if (stringMapSpot == null || stringMapSpot.Length == 0)
+                    {
+                        ModInstance.instance.Log("No PreHelioMapSpot entry for " + TrimFolderName(folderName));
+                        return null;
+                    }
+                    float[] mapSpot = { float.Parse(stringMapSpot[0]), float.Parse(stringMapSpot[1]), float.Parse(stringMapSpot[2]) };
+                    data.stratoMapSpot = mapSpot;
+
+                    string[] stringMapSpotD = ((JArray)(parsedJson.GetValueSafe("DestroyedMapSpot"))).ToObject<string[]>();
+                    if (stringMapSpot == null || stringMapSpot.Length == 0)
+                    {
+                        ModInstance.instance.Log("No DestroyedMapSpot entry for " + TrimFolderName(folderName));
+                        return null;
+                    }
+                    float[] mapSpotD = { float.Parse(stringMapSpotD[0]), float.Parse(stringMapSpotD[1]), float.Parse(stringMapSpotD[2]) };
+                    data.destroyedMapSpot = mapSpotD;
+                }
+                ModInstance.log("Non-HelioOnly map spots read");
+
+                string[] stringMapSpotHelio = ((JArray)(parsedJson.GetValueSafe("PostHelioMapSpot"))).ToObject<string[]>();
+                if (stringMapSpotHelio == null || stringMapSpotHelio.Length == 0)
+                {
+                    ModInstance.instance.Log("No PostHelioMapSpot entry for " + TrimFolderName(folderName));
                     return null;
                 }
-                float[] mapSpotD = { float.Parse(stringMapSpotD[0]), float.Parse(stringMapSpotD[1]), float.Parse(stringMapSpotD[2]) };
-                data.destroyedMapSpot = mapSpotD;
-            }
-            ModInstance.log("Non-HelioOnly map spots read");
+                float[] mapSpotHelio = { float.Parse(stringMapSpotHelio[0]), float.Parse(stringMapSpotHelio[1]), float.Parse(stringMapSpotHelio[2]) };
+                data.helioMapSpot = mapSpotHelio;
 
-            string[] stringMapSpotHelio = ((JArray)(parsedJson.GetValueSafe("PostHelioMapSpot"))).ToObject<string[]>();
-            if (stringMapSpotHelio == null || stringMapSpotHelio.Length == 0)
-            {
-                ModInstance.instance.Log("No PostHelioMapSpot entry for " + TrimFolderName(folderName));
-                return null;
+                ModInstance.log("Helio map spot read");
             }
-            float[] mapSpotHelio = { float.Parse(stringMapSpotHelio[0]), float.Parse(stringMapSpotHelio[1]), float.Parse(stringMapSpotHelio[2]) };
-            data.helioMapSpot = mapSpotHelio;
-
-            ModInstance.log("Helio map spot read");
 
             string[] likes = ((JArray)(parsedJson.GetValueSafe("Likes"))).ToObject<string[]>();
             if (likes == null)
@@ -190,6 +204,7 @@ namespace CharacterLoader
             data.dislikes = dislikes;
             ModInstance.log("Dislikes read");
 
+
             string skeleton = (string)parsedJson.GetValueSafe("Skeleton");
             if (skeleton == null || skeleton.Length == 0)
             {
@@ -198,6 +213,9 @@ namespace CharacterLoader
             }
             data.skeleton = skeleton;
             ModInstance.log("Skeleton read");
+
+            int spriteSize = int.Parse((string)parsedJson.GetValueSafe("SpriteSize"));
+            data.spriteSize = spriteSize;
 
             if (parsedJson.TryGetValue("Ages", out object ages))
             {
@@ -230,6 +248,11 @@ namespace CharacterLoader
 
         public static Sprite GetCustomImage(string folderName, string imageName)
         {
+            return GetCustomImage(folderName, imageName, 16);
+        }
+
+        public static Sprite GetCustomImage(string folderName, string imageName, int targetHeight)
+        {
             ModInstance.log("Looking for image " + imageName + " in " + TrimFolderName(folderName));
             if (customSprites.ContainsKey(imageName))
             {
@@ -253,7 +276,7 @@ namespace CharacterLoader
                     ImageConversion.LoadImage(texture, bytes);
                     texture.Apply();
                     int height = texture.height;
-                    int targetHeightInUnits = 16;
+                    int targetHeightInUnits = targetHeight;
                     float density = height / targetHeightInUnits;
                     image = Sprite.Create(texture, new Rect(0, 0, texture.width, texture.height), new Vector2(0.5f, 0), density);
                 } catch (Exception e)

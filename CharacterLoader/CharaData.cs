@@ -43,6 +43,7 @@ namespace CharacterLoader
         public string folderName;
         public bool ages;
         public bool onMap = true;
+        public int spriteSize = -1;
 
         public CustomChara MakeChara()
         {

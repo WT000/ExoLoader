@@ -28,7 +28,7 @@ namespace CharacterLoader
                 ModInstance.log("CharaImage is loading a custom chara sprite, getting image " + spriteName + "...");
                 try
                 {
-                    __result = FileManager.GetCustomImage(((CustomChara)ch).data.folderName, MakeRealSpriteName(spriteName, (CustomChara)ch));
+                    __result = FileManager.GetCustomImage(((CustomChara)ch).data.folderName, MakeRealSpriteName(spriteName, (CustomChara)ch), ((CustomChara)ch).data.spriteSize);
                     return false;
                 } catch (Exception e)
                 {
@@ -55,7 +55,7 @@ namespace CharacterLoader
                 ModInstance.log("AssetManager is loading a custom chara sprite, getting image " + spriteName + "...");
                 try
                 {
-                    __result = FileManager.GetCustomImage(((CustomChara)ch).data.folderName, MakeRealSpriteName(spriteName, (CustomChara)ch));
+                    __result = FileManager.GetCustomImage(((CustomChara)ch).data.folderName, MakeRealSpriteName(spriteName, (CustomChara)ch), ((CustomChara)ch).data.spriteSize);
                     return false;
                 }
                 catch (Exception e)

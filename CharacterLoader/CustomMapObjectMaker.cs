@@ -39,10 +39,15 @@ namespace CharacterLoader
             return directT.gameObject;
         }
 
+        private static GameObject GetMom(string season, int week)
+        {
+            return null;
+        }
+
         //returns the map object modified to match the customChara along with the Transform it should be a child of
         public static Tuple<GameObject, Transform> MakeCustomMapObject(string customCharaId, string season, int week, string scene)
         {
-            ModInstance.log("Entered model facctory");
+            ModInstance.log("Entered model factory");
             string maybeKey = customCharaId + "_" + season + "_month" + (season != "glow" ? week.ToString() : "");
             if (mapObjects.ContainsKey(maybeKey))
             {
@@ -135,6 +140,7 @@ namespace CharacterLoader
                     ModInstance.log("Got " + i.ToString() + "th art object");
                     if (artObject != null)
                     {
+                        ModInstance.log("Art object is named " + artObject.name);
                         artObject.name = cC.charaID + i.ToString();
                         ModifyArtObject(artObject, cC, i);
                         ModInstance.log("Modified " + i.ToString() + "th art object");
@@ -149,7 +155,7 @@ namespace CharacterLoader
             charaSwitcher.name = cC.charaID + "switcher";
             try
             {
-                 FieldInfo fInfo = typeof(CharaSwitcher).GetField("artAgeTransforms", BindingFlags.NonPublic | BindingFlags.Instance);
+                FieldInfo fInfo = typeof(CharaSwitcher).GetField("artAgeTransforms", BindingFlags.NonPublic | BindingFlags.Instance);
                 if (fInfo != null)
                 {
                     fInfo.SetValue(charaSwitcher, artAgeTransforms);
@@ -158,12 +164,14 @@ namespace CharacterLoader
                     ModInstance.log("FieldInfo was null");
                     return null;
                 }
-            } catch (Exception e)
+            } 
+            catch (Exception e)
             {
-                ModInstance.log("Reflection on chara switcher failed...");
-                ModInstance.log(e.Message);
-                return null;
+                    ModInstance.log("Reflection on chara switcher failed...");
+                    ModInstance.log(e.Message);
+                    return null;
             }
+            charaSwitcher.DestroySafe();
             newObject.transform.localScale = new Vector3(1f,1f,1f);
             return newObject;            
         }
@@ -174,7 +182,11 @@ namespace CharacterLoader
 
             //artObject.GetComponent<MeshRenderer>().material.name = artObject.name + "_Material";
             //artObject.GetComponent<MeshRenderer>().material.mainTexture = FileManager.GetCustomImage(cC.data.folderName, cC.charaID + "_model_" + artStage.ToString()).texture;
-            artObject.GetComponent<MeshRenderer>().sharedMaterial.SetColor("_mainTex", new Color(255, 0, 0));
+            //artObject.GetComponent<MeshRenderer>().sharedMaterial.SetTexture("newTexture" + artObject.name, FileManager.GetCustomImage(cC.data.folderName, cC.charaID + "_model_" + artStage.ToString()).texture);
+            //artObject.GetComponent<MeshRenderer>().sharedMaterial.SetColor("_mainTex", new Color(255, 0, 0));
+            //artObject.GetComponent<MeshRenderer>().materials[0].SetTexture("_MainTex", FileManager.GetCustomImage(cC.data.folderName, cC.charaID + "_model_" + artStage.ToString()).texture);
+            Material mat = artObject.GetComponent<MeshRenderer>().materials[0] = new Material(artObject.GetComponent<MeshRenderer>().materials[0]);
+            mat.mainTexture = FileManager.GetCustomImage(cC.data.folderName, cC.charaID + "_model_" + artStage.ToString()).texture;
             ModInstance.log("Set texture on material");
         }
     }
