@@ -84,6 +84,72 @@ namespace CharacterLoader
             }
             ModInstance.log("Read Name entry");
 
+            if (data.TryGetValue("Type", out object typeName))
+            {
+                switch (typeName)
+                {
+                    case "memory":
+                        {
+                            cardData.type = CardType.memory; 
+                            break;
+                        }
+                    default:
+                        {
+                            ModInstance.log("Card type " + typeName + " is invalid or not supported yet!");
+                            break;
+                        }
+                }
+            }
+            else
+            {
+                ModInstance.instance.Log("no Type entry for " + Path.GetFileName(file));
+            }
+            ModInstance.log("Read Type entry");
+
+            if (data.TryGetValue("Value", out object value))
+            {
+                cardData.value = (int)value;
+            }
+            else
+            {
+                ModInstance.instance.Log("no Value entry for " + Path.GetFileName(file));
+            }
+            ModInstance.log("Read Value entry");
+
+            if (data.TryGetValue("Suit", out object suitName))
+            {
+                switch (suitName)
+                {
+                    case "physical":
+                        {
+                            cardData.suit = CardSuit.physical;
+                            break;
+                        }
+                    case "mental":
+                        {
+                            cardData.suit = CardSuit.mental;
+                            break;
+                        }
+                    case "social":
+                        {
+                            cardData.suit = CardSuit.social;
+                            break;
+                        }
+                    case "wild":
+                        {
+                            cardData.suit = CardSuit.wildcard;
+                            break;
+                        }
+                }
+            }
+            else
+            {
+                ModInstance.instance.Log("no Suit entry for " + Path.GetFileName(file));
+            }
+            ModInstance.log("Read Suit entry");
+
+            //artist name, socials and link, plus abilities left
+
         }
     }
 }
