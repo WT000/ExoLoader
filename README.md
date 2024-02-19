@@ -1,4 +1,7 @@
 # ExoCharacterLoader
+
+(this readme is outdated! Will update sometime)
+
 Mod for I Was a Teenage Exocolonist that makes adding custom characters easier.
 
 Uses BepInEx to inject the code (included in the releases)
