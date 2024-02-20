@@ -9,6 +9,9 @@ namespace CharacterLoader
 {
     public class CustomCardData
     {
+        public static Dictionary<string,string> idToFile = new Dictionary<string,string>();
+
+
         public string file;
         public string id;
         public string name;
@@ -28,6 +31,7 @@ namespace CharacterLoader
 
         public void MakeCard()
         {
+            idToFile.Add(id, file);
             new CardData(id, name, type, suit, level, value)
             {
                 originalAbilityTypes = abilityIds,

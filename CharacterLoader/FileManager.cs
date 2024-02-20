@@ -332,9 +332,56 @@ namespace CharacterLoader
             return image;
         }
 
-        public static string TrimFolderName(string folderName)
+
+    public static Sprite GetCustomCardSprite(string cardID, string originFile)
         {
-            return folderName.RemoveStart(AppDomain.CurrentDomain.BaseDirectory);
+            if (originFile == null)
+            {
+                ModInstance.log("Tried getting sprite for non-custom card");
+                return null;
+            }
+
+            ModInstance.log("Looking for card image " + cardID);
+            string spriteName = "card_" + cardID;
+            if (customSprites.ContainsKey(spriteName))
+            {
+                ModInstance.log("Requested image is already loaded!");
+                return customSprites[spriteName];
+            }
+
+            string path = originFile.Replace(".json", ".png");
+            if (!File.Exists(path))
+            {
+                ModInstance.log("Couldn't find image " + Path.GetFileName(path));
+                return null;
+            }
+
+            Sprite image = null;
+            Texture2D texture = null;
+            Byte[] bytes = null;
+            try
+            {
+                texture = new Texture2D(2, 2);
+                bytes = File.ReadAllBytes(path);
+                ImageConversion.LoadImage(texture, bytes);
+                texture.Apply();
+                image = Sprite.Create(texture, new Rect(0, 0, texture.width, texture.height), new Vector2(0.5f, 0));
+            }
+            catch (Exception e)
+            {
+                ModInstance.log("Couldn't make sprite from file " + TrimFolderName(path));
+                ModInstance.log(texture == null ? "The texture is null" : texture.isReadable.ToString());
+                ModInstance.log(bytes.Length.ToString() + "bytes in the image");
+                ModInstance.log(e.ToString());
+            }
+            customSprites.Add(spriteName, image);
+            ModInstance.log("Sprite created, " + image.texture.height + " in height");
+            return image;
         }
+
+    public static string TrimFolderName(string folderName)
+    {
+        return folderName.RemoveStart(AppDomain.CurrentDomain.BaseDirectory);
+    }
     }
 }

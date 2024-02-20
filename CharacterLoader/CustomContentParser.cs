@@ -1,4 +1,6 @@
-﻿using Newtonsoft.Json;
+﻿using HarmonyLib;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -148,8 +150,59 @@ namespace CharacterLoader
             }
             ModInstance.log("Read Suit entry");
 
-            //artist name, socials and link, plus abilities left
+            if (data.TryGetValue("ArtistName", out object artistName))
+            {
+                cardData.artist = (string)artistName;
+            }
+            else
+            {
+                ModInstance.instance.Log("no ArtistName entry for " + Path.GetFileName(file));
+            }
+            ModInstance.log("Read ArtistName entry");
 
+            if (data.TryGetValue("ArtistSocialAt", out object artistAt))
+            {
+                cardData.artistAt = (string)artistAt;
+            }
+            else
+            {
+                ModInstance.instance.Log("no ArtistSocialAt entry for " + Path.GetFileName(file));
+            }
+            ModInstance.log("Read ArtistSocialAt entry");
+
+            if (data.TryGetValue("ArtistLink", out object artistLink))
+            {
+                cardData.artistLink = (string)artistLink;
+            }
+            else
+            {
+                ModInstance.instance.Log("no ArtistLink entry for " + Path.GetFileName(file));
+            }
+            ModInstance.log("Read ArtistLink entry");
+
+            List<CardAbilityType> abilities = new List<CardAbilityType>();
+            List<int> values = new List<int>();
+            List<CardSuit> suits = new List<CardSuit>();
+            for (int i = 1; i <= 3; i++)
+            {
+                if (data.TryGetValue("Ability" + i.ToString(), out object abilityEntry))
+                {
+                    Dictionary<string, object> abilityMap;
+
+                    abilityMap = ((JObject)abilityEntry).ToObject<Dictionary<string, object>>();
+
+                    ModInstance.log("Reading an Ability entry");
+
+                    abilities.Add(CardAbilityType.FromID((string)abilityMap.GetValueSafe("ID")));
+                    values.Add(((string)abilityMap.GetValueSafe("value")).ParseInt());
+                    suits.Add(((string)abilityMap.GetValueSafe("ID")).ParseEnum<CardSuit>());
+                }
+            }
+            cardData.abilityIds = abilities;
+            cardData.abilityValues = values;
+            cardData.abilitySuits = suits;
+
+            cardData.MakeCard();
         }
     }
 }

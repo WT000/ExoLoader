@@ -118,6 +118,22 @@ namespace CharacterLoader
         }
 
 
+        [HarmonyPatch(typeof(AssetManager))]
+        [HarmonyPatch(nameof(AssetManager.GetCardSprite))]
+        [HarmonyPrefix]
+        public static bool LoadCustomCardSprite(ref Sprite __result, string cardID)
+        {
+            string file = CustomCardData.idToFile.GetSafe(cardID);
+            if (file != null)
+            {
+                __result = FileManager.GetCustomCardSprite(cardID, file);
+                return false;
+            } else
+            {
+                return true;
+            }
+        }
+
     }
 
    
