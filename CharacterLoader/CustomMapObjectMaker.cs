@@ -82,13 +82,13 @@ namespace CharacterLoader
         private static GameObject CopyAndModifyMapObject(GameObject templateObject, CustomChara cC, string scene) 
         {
             GameObject newObject = GameObject.Instantiate(templateObject);
-            ModInstance.log("Copied Map object");
+            //ModInstance.log("Copied Map object");
 
             //map spot modification
             MapSpot mapSpot = newObject.GetComponent<MapSpot>();
-            ModInstance.log("MapSpot got");
+            //ModInstance.log("MapSpot got");
             mapSpot.charaID = cC.charaID;
-            ModInstance.log("MapSpot charaID changed");
+            //ModInstance.log("MapSpot charaID changed");
 
             try
             {
@@ -100,7 +100,7 @@ namespace CharacterLoader
                 ModInstance.log("reflection on mapSpot failed");
                 ModInstance.log(e.Message);
             }
-            ModInstance.log("triggerDisabled on MapSpot is " + mapSpot.triggerDisabled.ToString());
+            //ModInstance.log("triggerDisabled on MapSpot is " + mapSpot.triggerDisabled.ToString());
 
 
             if (cC.data.helioOnly && (scene.Equals("strato") || scene.Equals("stratodestroyed")))
@@ -121,7 +121,7 @@ namespace CharacterLoader
                 newObject.transform.localPosition = new Vector3(cC.data.destroyedMapSpot[0], cC.data.destroyedMapSpot[1], cC.data.destroyedMapSpot[2]);
             }
             mapSpot.MoveToGround();
-            ModInstance.log("Changed position of map object");
+            //ModInstance.log("Changed position of map object");
             List<Transform> artAgeTransforms = new List<Transform>(); //this is for the chara switcher
 
             ModInstance.log("Preparing to find and modify art objects");
@@ -135,15 +135,15 @@ namespace CharacterLoader
             {
                 for (int i = 1; i <= 3; i++)
                 {
-                    ModInstance.log("Searching " + i.ToString() + "th art object");
+                    //ModInstance.log("Searching " + i.ToString() + "th art object");
                     GameObject artObject = newObject.transform.Find(cC.data.skeleton).Find(cC.data.skeleton + i.ToString()).gameObject;
                     ModInstance.log("Got " + i.ToString() + "th art object");
                     if (artObject != null)
                     {
-                        ModInstance.log("Art object is named " + artObject.name);
+                        //ModInstance.log("Art object is named " + artObject.name);
                         artObject.name = cC.charaID + i.ToString();
                         ModifyArtObject(artObject, cC, i);
-                        ModInstance.log("Modified " + i.ToString() + "th art object");
+                        //ModInstance.log("Modified " + i.ToString() + "th art object");
                         artAgeTransforms.Add(artObject.transform);
                     }
                 }
@@ -171,7 +171,7 @@ namespace CharacterLoader
                     ModInstance.log(e.Message);
                     return null;
             }
-            charaSwitcher.DestroySafe();
+            //charaSwitcher.DestroySafe();
             newObject.transform.localScale = new Vector3(1f,1f,1f);
             return newObject;            
         }
@@ -187,7 +187,7 @@ namespace CharacterLoader
             //artObject.GetComponent<MeshRenderer>().materials[0].SetTexture("_MainTex", FileManager.GetCustomImage(cC.data.folderName, cC.charaID + "_model_" + artStage.ToString()).texture);
             Material mat = artObject.GetComponent<MeshRenderer>().materials[0] = new Material(artObject.GetComponent<MeshRenderer>().materials[0]);
             mat.mainTexture = FileManager.GetCustomImage(cC.data.folderName, cC.charaID + "_model_" + artStage.ToString()).texture;
-            ModInstance.log("Set texture on material");
+            //ModInstance.log("Set texture on material");
         }
     }
 }

@@ -12,18 +12,19 @@ namespace CharacterLoader
 {
     public class CustomContentParser
     {
-        public static void ParseContentFolder(string contentFolderPath)
+        public static void ParseContentFolder(string contentFolderPath, string contentType)
         {
             string[] folders = Directory.GetDirectories(contentFolderPath);
             foreach (string folder in folders)
             {
                 string folderName = Path.GetFileName(folder);
-                switch (folderName)
-                {
-                    case "Stories":
+                if (folderName.Equals(contentType)) { 
+                    switch (folderName)
+                    {
+                        case "Stories":
                         {
                             ModInstance.log("Parsing stories folder");
-                            foreach (string file  in Directory.GetFiles(folder))
+                            foreach (string file in Directory.GetFiles(folder))
                             {
                                 ModInstance.log("Parsing file : " + Path.GetFileName(file));
                                 if (file.EndsWith(".exo"))
@@ -33,10 +34,10 @@ namespace CharacterLoader
                             }
                             break;
                         }
-                    case "Cards":
+                        case "Cards":
                         {
                             ModInstance.log("Parsing cards folder");
-                            foreach(string file in Directory.GetFiles(folder))
+                            foreach (string file in Directory.GetFiles(folder))
                             {
                                 if (file.EndsWith(".json"))
                                 {
@@ -47,6 +48,7 @@ namespace CharacterLoader
 
                             break;
                         }
+                    }
                 }
             }
         }
@@ -65,6 +67,7 @@ namespace CharacterLoader
             }
 
             CustomCardData cardData = new CustomCardData();
+            cardData.file = file;
 
             if (data.TryGetValue("ID", out object id))
             {
@@ -79,6 +82,16 @@ namespace CharacterLoader
             if (data.TryGetValue("Name", out object name))
             {
                 cardData.name = (string)name;
+            }
+            else
+            {
+                ModInstance.instance.Log("no Name entry for " + Path.GetFileName(file));
+            }
+            ModInstance.log("Read Name entry");
+
+            if (data.TryGetValue("Level", out object level))
+            {
+                cardData.level = int.Parse((string)level);
             }
             else
             {
@@ -110,7 +123,7 @@ namespace CharacterLoader
 
             if (data.TryGetValue("Value", out object value))
             {
-                cardData.value = (int)value;
+                cardData.value = ((string)value).ParseInt();
             }
             else
             {
@@ -192,10 +205,17 @@ namespace CharacterLoader
                     abilityMap = ((JObject)abilityEntry).ToObject<Dictionary<string, object>>();
 
                     ModInstance.log("Reading an Ability entry");
-
-                    abilities.Add(CardAbilityType.FromID((string)abilityMap.GetValueSafe("ID")));
-                    values.Add(((string)abilityMap.GetValueSafe("value")).ParseInt());
-                    suits.Add(((string)abilityMap.GetValueSafe("ID")).ParseEnum<CardSuit>());
+                    string abID = (string)abilityMap.GetValueSafe("ID");
+                    CardAbilityType abType = CardAbilityType.FromID(abID);
+                    if (abType != null)
+                    {
+                        abilities.Add(abType);
+                        values.Add(((string)abilityMap.GetValueSafe("value")).ParseInt());
+                        suits.Add(((string)abilityMap.GetValueSafe("ID")).ParseEnum<CardSuit>());
+                    } else if (abID != null && abID != "")
+                    {
+                        ModInstance.log("WARNING: Incorrect Ability ID : " + abID);
+                    }
                 }
             }
             cardData.abilityIds = abilities;

@@ -20,5 +20,37 @@ namespace CharacterLoader
             this.data = data;
             
         }
+
+        public void DictionaryTests()
+        {
+            try
+            {
+                ModInstance.log("Testing " + charaID + " character's dictionaries");
+                Chara test = Chara.FromID(charaID);
+                if (test == null)
+                {
+                    ModInstance.log("Chara.FromID returned null for " + charaID);
+                    return;
+                }
+                else
+                {
+                    ModInstance.log("Chara.FromID worked for " + charaID);
+                }
+                if (data.onMap)
+                {
+                    List<Story> storiesTest = Story.storiesByCharaLow[test];
+                    if (storiesTest.Count == 0)
+                    {
+                        ModInstance.log("No low priority stories for " + test.charaID);
+                    }
+
+                }
+                ModInstance.log("Dictionaries tests passed");
+            }
+            catch (Exception e)
+            {
+                ModInstance.log("Character with ID " + charaID + " failed the dictionary tests");
+            }
+        }
     }
 }

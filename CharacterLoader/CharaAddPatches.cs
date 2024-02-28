@@ -41,7 +41,7 @@ namespace CharacterLoader
                     foreach (string filePath in Directory.EnumerateFiles(spritesPath))
                     {
                         string file = Path.GetFileName(filePath);
-                        ModInstance.log("Checking " + file);
+                        //ModInstance.log("Checking " + file);
                         if (file.EndsWith(".png" ) && file.StartsWith(data.id))
                         {
                             newlist.Add(file.Replace(".png", ""));
@@ -61,6 +61,10 @@ namespace CharacterLoader
                     ModInstance.log("Added " +  counter + " image names to the list");
 
                 }
+            } else if (filename == "ExocolonistCards - cards")
+            {
+                ModInstance.log("calling LoadCustomContent for Cards");
+                LoadCustomContent("Cards");
             }
         }
 
@@ -70,7 +74,7 @@ namespace CharacterLoader
         {
             FinalizeCharacters();
             logStoryReq = true;
-            LoadCustomContent();
+            LoadCustomContent("Stories");
             logStoryReq = false;
         }
 
@@ -91,10 +95,14 @@ namespace CharacterLoader
                 }
                 ParserStory.LoadStoriesFile("chara_" + CChara.data.id + ".exo", Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "CustomCharacters", CChara.data.folderName , "Stories"));
                 ModInstance.log("Loaded story file with Parser");
+                CChara.DictionaryTests();
+                
             }
         }
 
-        public static void LoadCustomContent()
+
+
+        public static void LoadCustomContent(string contentType)
         {
             ModInstance.instance.Log("Checking CustomContent folders");
             string[] contentFolders = FileManager.GetAllCustomContentFolders();
@@ -105,8 +113,8 @@ namespace CharacterLoader
             }
             foreach(string folder in contentFolders)
             {
-                ModInstance.log("Parsing content folder: " + FileManager.TrimFolderName(folder));
-                CustomContentParser.ParseContentFolder(folder);
+                ModInstance.log("Parsing " + contentType + " content folder: " + FileManager.TrimFolderName(folder));
+                CustomContentParser.ParseContentFolder(folder, contentType);
             }
         }
 

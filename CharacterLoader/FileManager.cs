@@ -57,7 +57,7 @@ namespace CharacterLoader
                 data.name = (string) dataMap.GetValueSafe("NAME");
                 data.nickname = (string) dataMap.GetValueSafe("NICKNAME");
 
-                ModInstance.log("ID, NAME, and NICKNAME read");
+                //ModInstance.log("ID, NAME, and NICKNAME read");
 
                 dataMap.TryGetValue("GENDER", out object g);
                 if (((string) g).Equals("X"))
@@ -86,7 +86,7 @@ namespace CharacterLoader
 
                 dataMap.TryGetValue("AGE10", out object age10);
                 data.ageOffset = int.Parse((string) age10) - 10;
-                ModInstance.log("Age read");
+                //ModInstance.log("Age read");
 
                 data.birthday = (string) dataMap.GetValueSafe("BIRTHDAY");
                 data.dialogueColor = (string) dataMap.GetValueSafe("DIALOGUECOLOR");
@@ -95,7 +95,7 @@ namespace CharacterLoader
                 data.moreInfo = (string) dataMap.GetValueSafe("MORE");
                 data.augment = (string) dataMap.GetValueSafe("ENHANCEMENT");
 
-                ModInstance.log("Up to Sliders read");
+                //ModInstance.log("Up to Sliders read");
 
                 data.slider1left = (string) dataMap.GetValueSafe("FILLBAR1LEFT");
                 data.slider1right = (string) dataMap.GetValueSafe("FILLBAR1RIGHT");
@@ -150,7 +150,7 @@ namespace CharacterLoader
                     ModInstance.instance.Log("No helio only entry for " + TrimFolderName(folderName));
                     return null;
                 }
-                ModInstance.log("HelioOnly read");
+                //ModInstance.log("HelioOnly read");
 
                 if (!data.helioOnly)
                 {
@@ -172,7 +172,7 @@ namespace CharacterLoader
                     float[] mapSpotD = { float.Parse(stringMapSpotD[0]), float.Parse(stringMapSpotD[1]), float.Parse(stringMapSpotD[2]) };
                     data.destroyedMapSpot = mapSpotD;
                 }
-                ModInstance.log("Non-HelioOnly map spots read");
+                //ModInstance.log("Non-HelioOnly map spots read");
 
                 string[] stringMapSpotHelio = ((JArray)(parsedJson.GetValueSafe("PostHelioMapSpot"))).ToObject<string[]>();
                 if (stringMapSpotHelio == null || stringMapSpotHelio.Length == 0)

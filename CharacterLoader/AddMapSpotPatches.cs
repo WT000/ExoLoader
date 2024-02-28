@@ -69,6 +69,10 @@ namespace CharacterLoader
             {
                 ModInstance.log("Called SetOrPickCharaStory on MapSpot with charaID " + __instance.charaID + " for Setting");
             }
+            if (CustomChara.customCharasById.ContainsKey(__instance.charaID))
+            {
+                CustomChara.customCharasById[__instance.charaID].DictionaryTests();
+            }
         }
 
         [HarmonyPatch(typeof(MapSpot), nameof(MapSpot.Trigger))]
@@ -98,5 +102,6 @@ namespace CharacterLoader
             }
             
         }
+
     }
 }

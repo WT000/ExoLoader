@@ -93,10 +93,10 @@ namespace CharacterLoader
         [HarmonyPrefix]
         public static bool LoadCustomPortrait(ref Sprite __result, string spriteName)
         {
-            ModInstance.log("Loading Portrait with name : " + spriteName);
             Chara ch = Chara.FromCharaImageID(spriteName);
             if (ch == null || !(ch is CustomChara))
             {
+                ModInstance.log("Loading CustomPortrait with name : " + spriteName);
                 return true;
             } else
             {
@@ -123,9 +123,11 @@ namespace CharacterLoader
         [HarmonyPrefix]
         public static bool LoadCustomCardSprite(ref Sprite __result, string cardID)
         {
+            ModInstance.log("Loading a card image, id = " + cardID);
             string file = CustomCardData.idToFile.GetSafe(cardID);
             if (file != null)
             {
+                ModInstance.log("------>>>> The card is a custom card from file " + file);
                 __result = FileManager.GetCustomCardSprite(cardID, file);
                 return false;
             } else

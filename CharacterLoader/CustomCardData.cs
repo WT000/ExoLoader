@@ -31,6 +31,7 @@ namespace CharacterLoader
 
         public void MakeCard()
         {
+            ModInstance.log("----> Adding card to dictionary, id = " +  id + ", file = " + file);
             idToFile.Add(id, file);
             new CardData(id, name, type, suit, level, value)
             {
@@ -44,6 +45,12 @@ namespace CharacterLoader
                 artistSocialAt = artistAt,
                 artistSocialUrl = artistLink
             };
+
+            CardData check = CardData.FromID(id);
+            if (check == null)
+            {
+                ModInstance.log("Card wasn't in list after MakeCard call");
+            }
         }
 
     }
