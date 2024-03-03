@@ -23,6 +23,7 @@ namespace CharacterLoader
             }
             string scene = MapManager.currentScene.RemoveStart("Colony").ToLower();
             string season = Princess.season.seasonID;
+            ModInstance.log(season);
             int week = Princess.monthOfSeason;
 
             foreach (CustomChara cC in CustomChara.customCharasById.Values)
@@ -89,18 +90,33 @@ namespace CharacterLoader
             }
         }
 
-        [HarmonyPatch(typeof(Result), nameof(Result.SetDefaultImages))]
+        [HarmonyPatch(typeof(CharaSwitcher), nameof(CharaSwitcher.SwitchChara))]
         [HarmonyPrefix]
-        public static void LogDefaultImages(Result __instance)
+        public static bool SkipIfCustom(CharaSwitcher __instance, bool forceEditMode)
         {
-            if (__instance.story.chara != null)
+            return true;
+            Chara chara = null;
+            try
             {
-                ModInstance.log("Setting default images for story " + __instance.story.storyID + " for chara " + __instance.story.chara.charaID);
-            } else
+                FieldInfo fInfo = typeof(CharaSwitcher).GetField("chara", BindingFlags.NonPublic | BindingFlags.Instance);
+                if (fInfo != null)
+                {
+                    chara = (Chara) fInfo.GetValue(__instance);
+                }
+                else
+                {
+                    ModInstance.log("FieldInfo was null");
+                }
+            } catch (Exception e)
             {
-                ModInstance.log("Setting default images for story " + __instance.story.storyID + " with null chara");
+                ModInstance.log(e.Message);
             }
-            
+            if (chara == null)
+            {
+                return true;
+            }
+            ModInstance.log("Reflection success with chara id " + chara.charaID);
+            return !CustomChara.customCharasById.ContainsKey(chara.charaID);
         }
 
     }

@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
+using Spine.Unity;
 
 namespace CharacterLoader
 {
@@ -14,11 +15,27 @@ namespace CharacterLoader
 
         private static GameObject GetMapObject(string charaId, string season, int week)
         {
-            Transform seasonTransform = GameObject.Find("Seasonal").transform.Find(season);
+            GameObject o = GameObject.Find("Seasonal");
+            Transform seasonalTransform = o.transform;
+            Transform seasonTransform = seasonalTransform.Find(season);
+            ModInstance.log("Got Season tranform");
+            if (seasonTransform == null) 
+            {
+                ModInstance.log("Season transform is null!");
+                return null;
+            }
+            
             Transform inner = seasonTransform.Find("inner");
             if (inner != null)
             {
-                return inner.Find("chara_" + charaId).gameObject;
+                Transform direct = inner.Find("chara_" + charaId);
+                if (direct != null) return direct.gameObject;
+                Transform byWeek = seasonTransform.Find("week" + week.ToString());
+                if (byWeek  != null)
+                {
+                    Transform attempt = byWeek.Find("chara_" + charaId);
+                    if (attempt != null) return attempt.gameObject;
+                }
             }
             Transform weekT = seasonTransform.Find("week" + week.ToString());
             if (weekT != null)
@@ -67,6 +84,12 @@ namespace CharacterLoader
             }
 
             GameObject templateObject = GetMapObject(cC.data.skeleton, season, week);
+            
+            if (templateObject == null) 
+            {
+                ModInstance.log("Couldn't get base map object, cancelling map spot creation for : " + customCharaId);
+                return null; 
+            }
 
             ModInstance.log("Got original map object (or is null if failed)");
 
@@ -152,7 +175,7 @@ namespace CharacterLoader
 
             //Chara Switcher modification
             CharaSwitcher charaSwitcher = newObject.GetComponentInChildren<CharaSwitcher>();
-            charaSwitcher.name = cC.charaID + "switcher";
+            /*charaSwitcher.name = cC.charaID + "switcher";
             try
             {
                 FieldInfo fInfo = typeof(CharaSwitcher).GetField("artAgeTransforms", BindingFlags.NonPublic | BindingFlags.Instance);
@@ -171,7 +194,10 @@ namespace CharacterLoader
                     ModInstance.log(e.Message);
                     return null;
             }
-            //charaSwitcher.DestroySafe();
+            */
+            charaSwitcher.DestroySafe();
+            ModInstance.log("CharaSwitcher removed");
+            //newObject.GetComponent<SkeletonMecanim>().valid = true;
             newObject.transform.localScale = new Vector3(1f,1f,1f);
             return newObject;            
         }
@@ -185,9 +211,29 @@ namespace CharacterLoader
             //artObject.GetComponent<MeshRenderer>().sharedMaterial.SetTexture("newTexture" + artObject.name, FileManager.GetCustomImage(cC.data.folderName, cC.charaID + "_model_" + artStage.ToString()).texture);
             //artObject.GetComponent<MeshRenderer>().sharedMaterial.SetColor("_mainTex", new Color(255, 0, 0));
             //artObject.GetComponent<MeshRenderer>().materials[0].SetTexture("_MainTex", FileManager.GetCustomImage(cC.data.folderName, cC.charaID + "_model_" + artStage.ToString()).texture);
-            Material mat = artObject.GetComponent<MeshRenderer>().materials[0] = new Material(artObject.GetComponent<MeshRenderer>().materials[0]);
-            mat.mainTexture = FileManager.GetCustomImage(cC.data.folderName, cC.charaID + "_model_" + artStage.ToString()).texture;
-            //ModInstance.log("Set texture on material");
+            //Material mat = artObject.GetComponent<MeshRenderer>().materials[0] = new Material(artObject.GetComponent<MeshRenderer>().materials[0]);
+            //mat.mainTexture = FileManager.GetCustomImage(cC.data.folderName, cC.charaID + "_model_" + artStage.ToString()).texture;
+
+            try
+            {
+                Shader shader = artObject.GetComponent<MeshRenderer>().materials[0].shader;
+                if (shader == null) throw new Exception("shader is null");
+                /*
+                UnityEngine.Object.Destroy(artObject.GetComponent<MeshRenderer>());
+
+                if (shader == null) throw new Exception("shader is null after destroy");*/
+
+                //artObject.AddComponent<MeshRenderer>();
+                MeshRenderer newMeshRenderer = artObject.GetComponent<MeshRenderer>();
+                if (newMeshRenderer == null) throw new Exception("newMesh is null");
+                newMeshRenderer.sharedMaterial = new Material(shader);
+                newMeshRenderer.sharedMaterial.SetTexture("_MainTex", FileManager.GetCustomImage(cC.data.folderName, cC.charaID + "_model_" + artStage.ToString()).texture);
+            }
+            catch
+            (Exception e)
+            {
+                ModInstance.log (e.Message);
+            }
         }
     }
 }

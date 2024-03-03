@@ -210,8 +210,9 @@ namespace CharacterLoader
                     if (abType != null)
                     {
                         abilities.Add(abType);
-                        values.Add(((string)abilityMap.GetValueSafe("value")).ParseInt());
-                        suits.Add(((string)abilityMap.GetValueSafe("ID")).ParseEnum<CardSuit>());
+
+                        values.Add(((string)abilityMap.GetValueSafe("Value")).ParseInt());
+                        suits.Add(((string)abilityMap.GetValueSafe("Suit")).ParseEnum<CardSuit>());
                     } else if (abID != null && abID != "")
                     {
                         ModInstance.log("WARNING: Incorrect Ability ID : " + abID);
