@@ -10,12 +10,15 @@ using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.Experimental.Rendering;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace CharacterLoader
 {
     public class FileManager
     {
-        
+        public static string commonFolderPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "CustomContent", "common");
+
+
         public static CharaData ParseCustomData(string folderName)
         {
             string dataPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "CustomCharacters", folderName, "Data.json");
@@ -309,7 +312,16 @@ namespace CharacterLoader
                 return null;
             }
 
-            Sprite image = null;
+            
+            Texture2D texture = GetTexture(path);
+            Sprite image = Sprite.Create(texture, new Rect(0, 0, texture.width, texture.height), new Vector2(0.5f, 0));
+            customSprites.Add(portraitName, image);
+            ModInstance.log("Sprite created, " + image.texture.height + " in height");
+            return image;
+        }
+
+        public static Texture2D GetTexture(string path)
+        {
             Texture2D texture = null;
             Byte[] bytes = null;
             try
@@ -318,7 +330,6 @@ namespace CharacterLoader
                 bytes = File.ReadAllBytes(path);
                 ImageConversion.LoadImage(texture, bytes);
                 texture.Apply();
-                image = Sprite.Create(texture, new Rect(0, 0, texture.width, texture.height), new Vector2(0.5f, 0));
             }
             catch (Exception e)
             {
@@ -327,13 +338,11 @@ namespace CharacterLoader
                 ModInstance.log(bytes.Length.ToString() + "bytes in the image");
                 ModInstance.log(e.ToString());
             }
-            customSprites.Add(portraitName, image);
-            ModInstance.log("Sprite created, " + image.texture.height + " in height");
-            return image;
+            return texture;
         }
 
 
-    public static Sprite GetCustomCardSprite(string cardID, string originFile)
+        public static Sprite GetCustomCardSprite(string cardID, string originFile)
         {
             if (originFile == null)
             {

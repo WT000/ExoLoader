@@ -6,12 +6,16 @@ using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
 using Spine.Unity;
+using Spine;
+using System.IO;
+using Newtonsoft.Json;
 
 namespace CharacterLoader
 {
     public class CustomMapObjectMaker
     {
         public static Dictionary<string,Tuple<GameObject,Transform>> mapObjects = new Dictionary<string, Tuple<GameObject, Transform>>();
+
 
         private static GameObject GetMapObject(string charaId, string season, int week)
         {
@@ -175,7 +179,7 @@ namespace CharacterLoader
 
             //Chara Switcher modification
             CharaSwitcher charaSwitcher = newObject.GetComponentInChildren<CharaSwitcher>();
-            /*charaSwitcher.name = cC.charaID + "switcher";
+            charaSwitcher.name = cC.charaID + "switcher";
             try
             {
                 FieldInfo fInfo = typeof(CharaSwitcher).GetField("artAgeTransforms", BindingFlags.NonPublic | BindingFlags.Instance);
@@ -194,8 +198,8 @@ namespace CharacterLoader
                     ModInstance.log(e.Message);
                     return null;
             }
-            */
-            charaSwitcher.DestroySafe();
+            
+            //charaSwitcher.DestroySafe();
             ModInstance.log("CharaSwitcher removed");
             //newObject.GetComponent<SkeletonMecanim>().valid = true;
             newObject.transform.localScale = new Vector3(1f,1f,1f);
@@ -218,21 +222,47 @@ namespace CharacterLoader
             {
                 Shader shader = artObject.GetComponent<MeshRenderer>().materials[0].shader;
                 if (shader == null) throw new Exception("shader is null");
-                /*
-                UnityEngine.Object.Destroy(artObject.GetComponent<MeshRenderer>());
 
-                if (shader == null) throw new Exception("shader is null after destroy");*/
 
-                //artObject.AddComponent<MeshRenderer>();
+                
+                string skeletonDataPath = Path.Combine(FileManager.commonFolderPath, "skeleton", "skeleton.json");
+                string skeletonAtlasPath = Path.Combine(FileManager.commonFolderPath, "skeleton", "skeleton.atlas");
+                TextAsset skeDataFile = new TextAsset(File.ReadAllText(skeletonDataPath));
+                TextAsset skeAtlasFile = new TextAsset(File.ReadAllText(skeletonAtlasPath));
+               
+                
+
+                Texture2D[] textures = new Texture2D[1];
+                textures[0] = FileManager.GetTexture(Path.Combine(FileManager.commonFolderPath, "skeleton", "stickman.png")); //Get actual texture here
+                textures[0].name = "skeleton";
+                SpineAtlasAsset spineAtlas = SpineAtlasAsset.CreateRuntimeInstance(skeAtlasFile, textures, shader, true);
+
+                SkeletonDataAsset skeData = SkeletonDataAsset.CreateRuntimeInstance(skeDataFile, spineAtlas, true, 0.01f);
+
+                //Animator animator = artObject.GetComponent<Animator>();
+                artObject.GetComponent<SkeletonMecanim>().skeletonDataAsset = skeData;
+                artObject.GetComponent<SkeletonMecanim>().Initialize(true);
+
+                //artObject.GetComponent<SkeletonMecanim>().skeleton = new Skeleton(skeData.GetSkeletonData(false));
+                //artObject.GetComponent<SkeletonMecanim>().skeleton.UpdateWorldTransform();
+
+                
+                //UnityEngine.Object.Destroy(artObject.GetComponent<SkeletonMecanim>());
+                
+
+                if (shader == null) throw new Exception("shader is null after destroy");
+
+                artObject.AddComponent<MeshRenderer>();
                 MeshRenderer newMeshRenderer = artObject.GetComponent<MeshRenderer>();
                 if (newMeshRenderer == null) throw new Exception("newMesh is null");
                 newMeshRenderer.sharedMaterial = new Material(shader);
-                newMeshRenderer.sharedMaterial.SetTexture("_MainTex", FileManager.GetCustomImage(cC.data.folderName, cC.charaID + "_model_" + artStage.ToString()).texture);
+                newMeshRenderer.sharedMaterial.SetTexture("_MainTex", FileManager.GetTexture(Path.Combine(FileManager.commonFolderPath, "skeleton", "stickman.png")));
             }
             catch
             (Exception e)
             {
-                ModInstance.log (e.Message);
+                ModInstance.log (e.StackTrace);
+                ModInstance.log(e.Message);
             }
         }
     }
