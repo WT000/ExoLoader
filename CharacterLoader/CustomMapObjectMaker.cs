@@ -233,11 +233,11 @@ namespace CharacterLoader
                 
 
                 Texture2D[] textures = new Texture2D[1];
-                textures[0] = FileManager.GetTexture(Path.Combine(FileManager.commonFolderPath, "skeleton", "stickman.png")); //Get actual texture here
+                textures[0] = FileManager.GetCustomImage(cC.data.folderName, cC.charaID + "_model_" + artStage.ToString()).texture;
                 textures[0].name = "skeleton";
                 SpineAtlasAsset spineAtlas = SpineAtlasAsset.CreateRuntimeInstance(skeAtlasFile, textures, shader, true);
 
-                SkeletonDataAsset skeData = SkeletonDataAsset.CreateRuntimeInstance(skeDataFile, spineAtlas, true, 0.01f);
+                SkeletonDataAsset skeData = SkeletonDataAsset.CreateRuntimeInstance(skeDataFile, spineAtlas, true, 0.004f);
 
                 //Animator animator = artObject.GetComponent<Animator>();
                 artObject.GetComponent<SkeletonMecanim>().skeletonDataAsset = skeData;
