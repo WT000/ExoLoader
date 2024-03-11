@@ -1,4 +1,4 @@
-# ExoCharacterLoader
+# ExoLoader
 
 (this readme is outdated! Will update sometime)
 
