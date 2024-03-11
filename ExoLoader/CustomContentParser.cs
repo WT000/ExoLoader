@@ -8,7 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace CharacterLoader
+namespace ExoLoader
 {
     public class CustomContentParser
     {

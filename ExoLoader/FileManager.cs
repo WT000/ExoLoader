@@ -12,7 +12,7 @@ using UnityEngine;
 using UnityEngine.Experimental.Rendering;
 using static System.Net.Mime.MediaTypeNames;
 
-namespace CharacterLoader
+namespace ExoLoader
 {
     public class FileManager
     {
@@ -21,9 +21,7 @@ namespace CharacterLoader
 
         public static CharaData ParseCustomData(string folderName)
         {
-            string dataPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "CustomCharacters", folderName, "Data.json");
-            ModInstance.log("Made Path");
-            string fullJson = File.ReadAllText(dataPath);
+            string fullJson = File.ReadAllText(Path.Combine(folderName, "data.json"));
             ModInstance.log("Read text");
 
             if (fullJson == null ||  fullJson.Length == 0)
@@ -238,7 +236,18 @@ namespace CharacterLoader
 
         public static string[] GetAllCustomCharaFolders()
         {
-            return Directory.GetDirectories(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "CustomCharacters"));
+            List<string> list = new List<string>();
+            foreach (string bundleFolder in GetAllCustomContentFolders())
+            {
+                foreach (string characterFolder in Directory.GetDirectories(bundleFolder))
+                {
+                    if (Path.GetFileName(characterFolder) == "Characters")
+                    {
+                        list.AddRange(Directory.GetDirectories(characterFolder));
+                    }
+                }
+            }
+            return list.ToArray();
         }
 
         public static string[] GetAllCustomContentFolders()

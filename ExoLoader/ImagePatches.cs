@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 using HarmonyLib;
 using UnityEngine;
 
-namespace CharacterLoader
+namespace ExoLoader
 {
     [HarmonyPatch]
     public class ImagePatches

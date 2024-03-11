@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 
-namespace CharacterLoader
+namespace ExoLoader
 {
     [HarmonyPatch]
     public class CharaAddPatches
@@ -36,7 +36,7 @@ namespace CharacterLoader
                     ModInstance.log(data.id + " added succesfully, adding images to the character sprite list");
                     string[] originalList = Northway.Utils.Singleton<AssetManager>.instance.charaSpriteNames;
                     List<string> newlist = originalList.ToList<string>();
-                    string spritesPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "CustomCharacters", folder, "Sprites");
+                    string spritesPath = Path.Combine(folder, "Sprites");
                     int counter = 0;
                     foreach (string filePath in Directory.EnumerateFiles(spritesPath))
                     {
@@ -78,7 +78,7 @@ namespace CharacterLoader
             logStoryReq = false;
         }
 
-        public static void FinalizeCharacters() //Loads likes, dislikes, and stories for custom characters
+        public static void FinalizeCharacters() //Loads likes, dislikes
         {
             foreach (CustomChara CChara in CustomChara.customCharasById.Values)
             {
@@ -93,9 +93,6 @@ namespace CharacterLoader
                     CardData cd = CardData.FromID(dislike);
                     CChara.likedCards.AddSafe(cd);
                 }
-                ParserStory.LoadStoriesFile("chara_" + CChara.data.id + ".exo", Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "CustomCharacters", CChara.data.folderName , "Stories"));
-                ModInstance.log("Loaded story file with Parser");
-                CChara.DictionaryTests();
                 
             }
         }

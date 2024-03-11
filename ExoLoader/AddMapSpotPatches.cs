@@ -7,7 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
 
-namespace CharacterLoader
+namespace ExoLoader
 {
     [HarmonyPatch]
     public class AddMapSpotPatches
@@ -90,34 +90,6 @@ namespace CharacterLoader
             }
         }
 
-        [HarmonyPatch(typeof(CharaSwitcher), nameof(CharaSwitcher.SwitchChara))]
-        [HarmonyPrefix]
-        public static bool SkipIfCustom(CharaSwitcher __instance, bool forceEditMode)
-        {
-            return true;
-            Chara chara = null;
-            try
-            {
-                FieldInfo fInfo = typeof(CharaSwitcher).GetField("chara", BindingFlags.NonPublic | BindingFlags.Instance);
-                if (fInfo != null)
-                {
-                    chara = (Chara) fInfo.GetValue(__instance);
-                }
-                else
-                {
-                    ModInstance.log("FieldInfo was null");
-                }
-            } catch (Exception e)
-            {
-                ModInstance.log(e.Message);
-            }
-            if (chara == null)
-            {
-                return true;
-            }
-            ModInstance.log("Reflection success with chara id " + chara.charaID);
-            return !CustomChara.customCharasById.ContainsKey(chara.charaID);
-        }
 
     }
 }

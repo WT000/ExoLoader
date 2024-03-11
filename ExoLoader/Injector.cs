@@ -7,7 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
 
-namespace CharacterLoader
+namespace ExoLoader
 {
     [BepInEx.BepInPlugin("CharacterLoaderInject","Character Loader","0.0.1")]
     public class Injector : BaseUnityPlugin

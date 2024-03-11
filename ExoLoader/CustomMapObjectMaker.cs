@@ -10,7 +10,7 @@ using Spine;
 using System.IO;
 using Newtonsoft.Json;
 
-namespace CharacterLoader
+namespace ExoLoader
 {
     public class CustomMapObjectMaker
     {
