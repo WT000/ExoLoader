@@ -65,6 +65,11 @@ namespace ExoLoader
             {
                 ModInstance.log("calling LoadCustomContent for Cards");
                 LoadCustomContent("Cards");
+            } else if (filename == "Exocolonist - variables")
+            {
+                ModInstance.log("Loading preliminary content");
+                ModInstance.log("Loading custom backgrounds");
+                LoadCustomContent("Backgrounds");
             }
         }
 

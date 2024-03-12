@@ -9,15 +9,15 @@ using UnityEngine;
 
 namespace ExoLoader
 {
-    [BepInEx.BepInPlugin("CharacterLoaderInject","Character Loader","0.0.1")]
+    [BepInEx.BepInPlugin("ExoLoaderInject", "ExoLoader", "1.0")]
     public class Injector : BaseUnityPlugin
     {
         public void Awake()
         {
-            Logger.LogInfo("Doing CharacterLoader patches...");
-            var harmony = new Harmony("CharacterLoader");
+            Logger.LogInfo("Doing ExoLoader patches...");
+            var harmony = new Harmony("ExoLoader");
             harmony.PatchAll();
-            Logger.LogInfo("CharacterLoader patches done.");
+            Logger.LogInfo("ExoLoader patches done.");
             ModInstance.instance = this;
         }
 

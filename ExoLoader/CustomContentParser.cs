@@ -1,6 +1,7 @@
 ﻿using HarmonyLib;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using Northway.Utils;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -12,6 +13,7 @@ namespace ExoLoader
 {
     public class CustomContentParser
     {
+        public static Dictionary<string, string> customBackgrounds = new Dictionary<string, string>();
         public static void ParseContentFolder(string contentFolderPath, string contentType)
         {
             string[] folders = Directory.GetDirectories(contentFolderPath);
@@ -46,6 +48,28 @@ namespace ExoLoader
                                 }
                             }
 
+                            break;
+                        }
+                        case "Backgrounds":
+                        {
+                            ModInstance.log("Adding backgrounds and CGs");
+                            List<string> cBgs = new List<string>(Singleton<AssetManager>.instance.backgroundAndEndingNames);
+                            foreach (string file in Directory.GetFiles(folder))
+                            {
+                                if (file.EndsWith(".png"))
+                                {
+                                    string bgName = Path.GetFileName(file).Replace(".png", "");
+                                    if (!Singleton<AssetManager>.instance.backgroundAndEndingNames.Contains(bgName))
+                                    {
+                                        ModInstance.log("Found bg " +  bgName);
+                                        cBgs.Add(bgName);
+                                        Singleton<AssetManager>.instance.backgroundAndEndingNames.Append(bgName);
+                                        customBackgrounds.Add(bgName, folder);
+                                        ModInstance.log("Added " + bgName + "to list");
+                                    }
+                                }
+                            }
+                            Singleton<AssetManager>.instance.backgroundAndEndingNames = cBgs.ToArray();
                             break;
                         }
                     }
