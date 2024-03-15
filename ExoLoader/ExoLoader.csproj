@@ -84,6 +84,8 @@
     <Compile Include="CustomMapObjectMaker.cs" />
     <Compile Include="ModInstance.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="StoryPatch.cs" />
+    <Compile Include="StoryPatchType.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
