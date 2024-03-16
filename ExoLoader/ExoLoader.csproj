@@ -82,6 +82,7 @@
     <Compile Include="ImagePatches.cs" />
     <Compile Include="Injector.cs" />
     <Compile Include="CustomMapObjectMaker.cs" />
+    <Compile Include="LinePointer.cs" />
     <Compile Include="ModInstance.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="StoryPatch.cs" />
