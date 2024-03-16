@@ -18,6 +18,8 @@ namespace ExoLoader
 
         public List<string> contentLines;
 
+        public int patchEnd = -1;
+
         public static StoryPatch ReadPatch(string[] lines, int index)
         {
             StoryPatch patch = new StoryPatch();
