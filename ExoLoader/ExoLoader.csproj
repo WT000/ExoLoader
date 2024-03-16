@@ -78,7 +78,7 @@
     <Compile Include="CustomChara.cs" />
     <Compile Include="CustomContentParser.cs" />
     <Compile Include="CustomMapManager.cs" />
-    <Compile Include="FileManager.cs" />
+    <Compile Include="CFileManager.cs" />
     <Compile Include="ImagePatches.cs" />
     <Compile Include="Injector.cs" />
     <Compile Include="CustomMapObjectMaker.cs" />

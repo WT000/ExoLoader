@@ -14,7 +14,7 @@ using static System.Net.Mime.MediaTypeNames;
 
 namespace ExoLoader
 {
-    public class FileManager
+    public class CFileManager
     {
         public static string commonFolderPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "CustomContent", "common");
 
@@ -248,6 +248,21 @@ namespace ExoLoader
                 }
             }
             return list.ToArray();
+        }
+
+        public static List<string> GetAllCustomContentFolders(string type) {
+            List<string> patchFolders = new List<string>();
+            foreach (string contentFolder in GetAllCustomContentFolders())
+            {
+                foreach (string candidateFolder in Directory.GetDirectories(contentFolder))
+                {
+                    if (Path.GetFileName(candidateFolder) == type)
+                    {
+                        patchFolders.Add(candidateFolder);
+                    }
+                }
+            }
+            return patchFolders;
         }
 
         public static string[] GetAllCustomContentFolders()

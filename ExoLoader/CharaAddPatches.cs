@@ -10,23 +10,23 @@ namespace ExoLoader
     {
         private static bool logStoryReq;
 
-        [HarmonyPatch(typeof(ParserData),"LoadData")]
+        [HarmonyPatch(typeof(ParserData), "LoadData")]
         [HarmonyPostfix]
         public static void AddCharaPatch(string filename)
         {
             if (filename == "Exocolonist - charas")
             {
                 ModInstance.instance.Log("Checking CustomCharacter folders");
-                string[] charaFolders = FileManager.GetAllCustomCharaFolders();
+                string[] charaFolders = CFileManager.GetAllCustomCharaFolders();
                 if (charaFolders != null && charaFolders.Length == 0) {
                     ModInstance.instance.Log("Found no folder");
                     return;
                 }
-                foreach (string folder in  charaFolders)
+                foreach (string folder in charaFolders)
                 {
-                    ModInstance.instance.Log("Parsing folder " +  FileManager.TrimFolderName(folder));
-                    
-                    CharaData data = FileManager.ParseCustomData(folder);
+                    ModInstance.instance.Log("Parsing folder " + CFileManager.TrimFolderName(folder));
+
+                    CharaData data = CFileManager.ParseCustomData(folder);
                     ModInstance.log("Adding character: " + data.id);
                     if (data != null)
                     {
@@ -42,7 +42,7 @@ namespace ExoLoader
                     {
                         string file = Path.GetFileName(filePath);
                         //ModInstance.log("Checking " + file);
-                        if (file.EndsWith(".png" ) && file.StartsWith(data.id))
+                        if (file.EndsWith(".png") && file.StartsWith(data.id))
                         {
                             newlist.Add(file.Replace(".png", ""));
                             List<string> l = Northway.Utils.Singleton<AssetManager>.instance.spritesByCharaID.GetSafe(data.id);
@@ -51,14 +51,14 @@ namespace ExoLoader
                                 l = new List<string>();
                                 Northway.Utils.Singleton<AssetManager>.instance.spritesByCharaID.Add(data.id, l);
                             }
-                            l.Add(file.Replace(".png", "").Replace("_normal",""));
+                            l.Add(file.Replace(".png", "").Replace("_normal", ""));
                             CustomChara.newCharaSprites.Add(file.Replace(".png", ""));
                             counter++;
                         }
                     }
 
                     Northway.Utils.Singleton<AssetManager>.instance.charaSpriteNames = newlist.ToArray();
-                    ModInstance.log("Added " +  counter + " image names to the list");
+                    ModInstance.log("Added " + counter + " image names to the list");
 
                 }
             } else if (filename == "ExocolonistCards - cards")
@@ -68,8 +68,16 @@ namespace ExoLoader
             } else if (filename == "Exocolonist - variables")
             {
                 ModInstance.log("Loading preliminary content");
+
+                ModInstance.log("Loading story patches");
+                StoryPatchManager.PopulatePatchList();
+
+                ModInstance.log("Patching story files");
+                StoryPatchManager.PatchAllStories();
+
                 ModInstance.log("Loading custom backgrounds");
                 LoadCustomContent("Backgrounds");
+
             }
         }
 
@@ -78,9 +86,6 @@ namespace ExoLoader
         public static void FinalizeLoading()
         {
             FinalizeCharacters();
-            logStoryReq = true;
-            LoadCustomContent("Stories");
-            logStoryReq = false;
         }
 
         public static void FinalizeCharacters() //Loads likes, dislikes
@@ -98,7 +103,7 @@ namespace ExoLoader
                     CardData cd = CardData.FromID(dislike);
                     CChara.likedCards.AddSafe(cd);
                 }
-                
+
             }
         }
 
@@ -107,15 +112,15 @@ namespace ExoLoader
         public static void LoadCustomContent(string contentType)
         {
             ModInstance.instance.Log("Checking CustomContent folders");
-            string[] contentFolders = FileManager.GetAllCustomContentFolders();
+            string[] contentFolders = CFileManager.GetAllCustomContentFolders();
             if (contentFolders != null && contentFolders.Length == 0)
             {
                 ModInstance.instance.Log("Found no folder");
                 return;
             }
-            foreach(string folder in contentFolders)
+            foreach (string folder in contentFolders)
             {
-                ModInstance.log("Parsing " + contentType + " content folder: " + FileManager.TrimFolderName(folder));
+                ModInstance.log("Parsing " + contentType + " content folder: " + CFileManager.TrimFolderName(folder));
                 CustomContentParser.ParseContentFolder(folder, contentType);
             }
         }
@@ -134,7 +139,7 @@ namespace ExoLoader
         {
             if (__instance is CustomChara)
             {
-                __result = (!((CustomChara)__instance).data.helioOnly || Princess.HasMemory("newship"));
+                __result = !((CustomChara)__instance).data.helioOnly || Princess.HasMemory("newship");
                 return false;
             } else
             {
@@ -142,14 +147,14 @@ namespace ExoLoader
             }
         }
 
-        [HarmonyPatch(typeof(Story), "FinishFindLocation")]
+        [HarmonyPatch(typeof(FileManager), nameof(FileManager.storiesPath), MethodType.Getter)]
         [HarmonyPrefix]
-        public static void DoLog(StoryReq req, bool ignoreDoubleLocationWarnings)
+        public static bool storiesPathGetterPatch(ref string __result)
         {
-            if (logStoryReq)
-            {
-                ModInstance.log("FinishFindLocation log, req = " + req.stringID);
-            }
+            __result = Path.Combine(CFileManager.commonFolderPath, "PatchedStories");
+            return false;
         }
+            
+ 
     }
 }

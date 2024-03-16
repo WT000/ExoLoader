@@ -8,7 +8,7 @@ namespace ExoLoader
 {
     public class LinePointer
     {
-        private int currentPos;
+        public int currentPos = 0;
 
         public int GetCurrent()
         {
@@ -21,12 +21,13 @@ namespace ExoLoader
             return currentPos;
         }
 
-        public bool SkipUntilMatch(string[] lines, string match)
+        public bool SkipUntilAfterMatch(string[] lines, string match)
         {
             for (int i = currentPos;  i < lines.Length; i++)
             {
-                if (lines[i].StartsWith(match))
+                if (lines[i].Trim().StartsWith(match))
                 {
+                    currentPos = i+1;
                     return true;
                 }
             }

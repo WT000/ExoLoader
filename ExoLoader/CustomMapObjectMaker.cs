@@ -225,15 +225,15 @@ namespace ExoLoader
 
 
                 
-                string skeletonDataPath = Path.Combine(FileManager.commonFolderPath, "skeleton", "skeleton.json");
-                string skeletonAtlasPath = Path.Combine(FileManager.commonFolderPath, "skeleton", "skeleton.atlas");
+                string skeletonDataPath = Path.Combine(CFileManager.commonFolderPath, "skeleton", "skeleton.json");
+                string skeletonAtlasPath = Path.Combine(CFileManager.commonFolderPath, "skeleton", "skeleton.atlas");
                 TextAsset skeDataFile = new TextAsset(File.ReadAllText(skeletonDataPath));
                 TextAsset skeAtlasFile = new TextAsset(File.ReadAllText(skeletonAtlasPath));
                
                 
 
                 Texture2D[] textures = new Texture2D[1];
-                textures[0] = FileManager.GetCustomImage(cC.data.folderName, cC.charaID + "_model_" + artStage.ToString()).texture;
+                textures[0] = CFileManager.GetCustomImage(cC.data.folderName, cC.charaID + "_model_" + artStage.ToString()).texture;
                 textures[0].name = "skeleton";
                 SpineAtlasAsset spineAtlas = SpineAtlasAsset.CreateRuntimeInstance(skeAtlasFile, textures, shader, true);
 
@@ -256,7 +256,7 @@ namespace ExoLoader
                 MeshRenderer newMeshRenderer = artObject.GetComponent<MeshRenderer>();
                 if (newMeshRenderer == null) throw new Exception("newMesh is null");
                 newMeshRenderer.sharedMaterial = new Material(shader);
-                newMeshRenderer.sharedMaterial.SetTexture("_MainTex", FileManager.GetTexture(Path.Combine(FileManager.commonFolderPath, "skeleton", "stickman.png")));
+                newMeshRenderer.sharedMaterial.SetTexture("_MainTex", CFileManager.GetTexture(Path.Combine(CFileManager.commonFolderPath, "skeleton", "stickman.png")));
             }
             catch
             (Exception e)
