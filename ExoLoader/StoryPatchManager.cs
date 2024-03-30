@@ -187,8 +187,13 @@ namespace ExoLoader
 
         public static void PatchStoryFile(string filePath)
         {
+            PatchStoryFile(filePath, "");
+        }
+
+        public static void PatchStoryFile(string filePath, string additionalPrefix)
+        {
             string[] baseLines = File.ReadAllLines(filePath);
-            StreamWriter writer = new StreamWriter(Path.Combine(patchedStoriesFolder, Path.GetFileNameWithoutExtension(filePath) + "_patched" +".exo"), false);
+            StreamWriter writer = new StreamWriter(Path.Combine(patchedStoriesFolder, additionalPrefix + "patched_" + Path.GetFileNameWithoutExtension(filePath) +".exo"), false);
             ModInstance.log("Patching file " + filePath);
             WritePatchedStoryFile(writer, baseLines);
 
@@ -199,7 +204,7 @@ namespace ExoLoader
 
         public static bool ShouldWriteNewPatchedFiles()
         {
-            if (!File.Exists(Path.Combine(patchedStoriesFolder, "chara_anemone_patched.exo"))) { return true; }
+            if (!File.Exists(Path.Combine(patchedStoriesFolder, "patched_chara_anemone.exo"))) { return true; }
 
 
             DateTime mostRecentEdit = DateTime.MinValue;
@@ -249,7 +254,7 @@ namespace ExoLoader
                 {
                     if (Path.GetExtension(storyFile) == ".exo")
                     {
-                        PatchStoryFile(storyFile);
+                        PatchStoryFile(storyFile, "_");
                     }
                 }
                 foreach (string folder in CFileManager.GetAllCustomContentFolders("Stories"))
