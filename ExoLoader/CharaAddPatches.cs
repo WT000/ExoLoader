@@ -101,7 +101,7 @@ namespace ExoLoader
                 foreach (string dislike in CChara.data.dislikes)
                 {
                     CardData cd = CardData.FromID(dislike);
-                    CChara.likedCards.AddSafe(cd);
+                    CChara.dislikedCards.AddSafe(cd);
                 }
 
             }
