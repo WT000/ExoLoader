@@ -67,14 +67,6 @@ namespace ExoLoader
                 LoadCustomContent("Cards");
             } else if (filename == "Exocolonist - variables")
             {
-                ModInstance.log("Loading preliminary content");
-
-                ModInstance.log("Loading story patches");
-                StoryPatchManager.PopulatePatchList();
-
-                ModInstance.log("Patching story files");
-                StoryPatchManager.PatchAllStories();
-
                 ModInstance.log("Loading custom backgrounds");
                 LoadCustomContent("Backgrounds");
 
