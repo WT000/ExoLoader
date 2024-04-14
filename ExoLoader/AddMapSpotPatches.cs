@@ -80,10 +80,6 @@ namespace ExoLoader
         [HarmonyPrefix]
         public static void LoggingPatchAgain(MapSpot __instance)
         {
-            if (__instance.type == MapSpotType.location)
-            {
-                ModInstance.log("Triggered location " + __instance.locationID + " map spot");
-            }
             if (__instance.story == null)
             {
                 ModInstance.log("Triggered MapSpot with charaID " + __instance.charaID + " but story is null");
@@ -94,6 +90,6 @@ namespace ExoLoader
             }
         }
 
- 
+
     }
 }

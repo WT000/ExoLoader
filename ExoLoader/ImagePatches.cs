@@ -31,7 +31,7 @@ namespace ExoLoader
                 ModInstance.log("CharaImage is loading a custom chara sprite, getting image " + spriteName + "...");
                 try
                 {
-                    __result = CFileManager.GetCustomImage(((CustomChara)ch).data.folderName, MakeRealSpriteName(spriteName, (CustomChara)ch), ((CustomChara)ch).data.spriteSize);
+                    __result = FileManager.GetCustomImage(((CustomChara)ch).data.folderName, MakeRealSpriteName(spriteName, (CustomChara)ch), ((CustomChara)ch).data.spriteSize);
                     return false;
                 }
                 catch (Exception e)
@@ -59,7 +59,7 @@ namespace ExoLoader
                 ModInstance.log("AssetManager is loading a custom chara sprite, getting image " + spriteName + "...");
                 try
                 {
-                    __result = CFileManager.GetCustomImage(((CustomChara)ch).data.folderName, MakeRealSpriteName(spriteName, (CustomChara)ch), ((CustomChara)ch).data.spriteSize);
+                    __result = FileManager.GetCustomImage(((CustomChara)ch).data.folderName, MakeRealSpriteName(spriteName, (CustomChara)ch), ((CustomChara)ch).data.spriteSize);
                     return false;
                 }
                 catch (Exception e)
@@ -106,7 +106,7 @@ namespace ExoLoader
             }
             else
             {
-                __result = CFileManager.GetCustomPortrait(((CustomChara)ch).data.folderName, MakeActualPortraitName(spriteName, (CustomChara)ch));
+                __result = FileManager.GetCustomPortrait(((CustomChara)ch).data.folderName, MakeActualPortraitName(spriteName, (CustomChara)ch));
                 return false;
             }
         }
@@ -134,7 +134,7 @@ namespace ExoLoader
             string file = CustomCardData.idToFile.GetSafe(cardID);
             if (file != null)
             {
-                __result = CFileManager.GetCustomCardSprite(cardID, file);
+                __result = FileManager.GetCustomCardSprite(cardID, file);
                 return false;
             }
             else
@@ -152,7 +152,7 @@ namespace ExoLoader
             string folder = CustomContentParser.customBackgrounds.GetSafe(spriteName);
             if (folder != null)
             {
-                Texture2D bgTexture = CFileManager.GetTexture(Path.Combine(folder,spriteName + ".png"));
+                Texture2D bgTexture = FileManager.GetTexture(Path.Combine(folder,spriteName + ".png"));
                 __result = Sprite.Create(bgTexture, new Rect(0, 0, bgTexture.width, bgTexture.height), new Vector2(0.5f, 0), 1);
                 return false;
             }

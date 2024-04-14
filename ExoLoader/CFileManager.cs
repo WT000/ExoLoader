@@ -12,11 +12,11 @@ using UnityEngine;
 using UnityEngine.Experimental.Rendering;
 using static System.Net.Mime.MediaTypeNames;
 
-namespace ExoLoader
+namespace SeraphicLoader
 {
     public class CFileManager
     {
-        public static string commonFolderPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "CustomContent", "common");
+        public static string commonFolderPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "SeraphicContent", "common");
 
 
         public static CharaData ParseCustomData(string folderName)
@@ -237,7 +237,7 @@ namespace ExoLoader
         public static string[] GetAllCustomCharaFolders()
         {
             List<string> list = new List<string>();
-            foreach (string bundleFolder in GetAllCustomContentFolders())
+            foreach (string bundleFolder in GetAllSeraphicContentFolders())
             {
                 foreach (string characterFolder in Directory.GetDirectories(bundleFolder))
                 {
@@ -250,9 +250,9 @@ namespace ExoLoader
             return list.ToArray();
         }
 
-        public static List<string> GetAllCustomContentFolders(string type) {
+        public static List<string> GetAllSeraphicContentFolders(string type) {
             List<string> patchFolders = new List<string>();
-            foreach (string contentFolder in GetAllCustomContentFolders())
+            foreach (string contentFolder in GetAllSeraphicContentFolders())
             {
                 foreach (string candidateFolder in Directory.GetDirectories(contentFolder))
                 {
@@ -265,9 +265,9 @@ namespace ExoLoader
             return patchFolders;
         }
 
-        public static string[] GetAllCustomContentFolders()
+        public static string[] GetAllSeraphicContentFolders()
         {
-            return Directory.GetDirectories(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "CustomContent"));
+            return Directory.GetDirectories(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "SeraphicContent"));
         }
 
 

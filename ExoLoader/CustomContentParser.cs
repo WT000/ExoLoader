@@ -23,8 +23,7 @@ namespace ExoLoader
                 if (folderName.Equals(contentType)) { 
                     switch (folderName)
                     {
-                        //Should be unnecessary after the patcher things
-                        /*case "Stories":
+                        case "Stories":
                         {
                             ModInstance.log("Parsing stories folder");
                             foreach (string file in Directory.GetFiles(folder))
@@ -32,12 +31,11 @@ namespace ExoLoader
                                 ModInstance.log("Parsing file : " + Path.GetFileName(file));
                                 if (file.EndsWith(".exo"))
                                 {
-                                    StoryPatchManager.PatchStoryFile(file);
                                     ParserStory.LoadStoriesFile(Path.GetFileName(file), folder);
                                 }
                             }
                             break;
-                        }*/
+                        }
                         case "Cards":
                         {
                             ModInstance.log("Parsing cards folder");
